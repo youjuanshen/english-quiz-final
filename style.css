@@ -1,32 +1,194 @@
-body { font-family: 'Comic Sans MS', sans-serif; background-color: #e3f2fd; margin: 0; padding: 20px; color: #333; }
-.container { max-width: 600px; margin: 0 auto; padding-top: 20px; }
+/* =========================================
+   🦁 英语闯关赛 - 核心样式表 (V6.0 最终版)
+   适配：首页、口语、笔试全套界面
+   ========================================= */
 
-/* 首页 */
-.header-banner { text-align: center; margin-bottom: 30px; }
-.header-banner h1::before { content: "🦁"; display: block; font-size: 60px; margin-bottom: 10px; animation: bounce 2s infinite; }
-.mode-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.lesson-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #f1f8e9; border: 1px solid #c5e1a5; border-radius: 12px; text-align: left; cursor: pointer; font-weight: bold; font-size: 16px; }
+/* --- 1. 全局基础 --- */
+body {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    background-color: #e3f2fd; /* 统一的清爽浅蓝背景 */
+    margin: 0;
+    padding: 20px;
+    color: #37474f;
+    -webkit-font-smoothing: antialiased;
+}
 
-/* 候考室 */
-.welcome-card { background: white; border-radius: 20px; padding: 30px; text-align: center; margin-top: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-select { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0 20px; }
-.start-btn { background: #4caf50; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; }
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding-bottom: 80px; /* 为底部栏留出空间 */
+}
 
-/* 答题区 */
-.question-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.q-tag { background: #29b6f6; color: white; padding: 4px 10px; border-radius: 10px; font-size: 12px; font-weight: bold; }
-.q-text { font-size: 18px; font-weight: bold; margin: 15px 0; }
-.img-box img { max-width: 100%; max-height: 200px; border-radius: 8px; }
-.score-buttons { display: flex; gap: 5px; margin-top: 15px; }
-.score-btn { flex: 1; padding: 10px 0; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
-.s5{background:#4caf50}.s4{background:#8bc34a}.s3{background:#ffc107;color:#333}.s2{background:#ff9800}.s1{background:#f44336}
+a { text-decoration: none; }
+button { cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
+button:active { transform: scale(0.96); }
 
-/* 笔试选项 */
-.answer-option { padding: 12px; border: 2px solid #eee; border-radius: 10px; margin-top: 10px; cursor: pointer; }
-.selected-option { background: #e3f2fd; border-color: #2196f3; }
-.feedback { margin-top: 10px; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; }
+/* --- 2. 顶部大标题 (带跳动狮子) --- */
+.header-banner { text-align: center; margin: 20px 0 40px; }
+.header-banner h1 { 
+    font-size: 28px; color: #006064; margin: 10px 0; text-shadow: 1px 1px 0 #fff;
+}
+.header-banner h1::before { 
+    content: "🦁"; display: block; font-size: 60px; margin-bottom: 5px; 
+    animation: bounce 2s infinite; 
+}
+.header-banner p { 
+    background: #b2ebf2; color: #006064; display: inline-block; 
+    padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: bold;
+}
 
-.footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; text-align: center; border-top: 1px solid #eee; font-weight: bold; z-index: 99; }
-.quiz-body { padding-bottom: 80px; }
-.top-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.9); padding: 10px 20px; position: sticky; top: 0; z-index: 99; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+/* --- 3. 首页菜单卡片 --- */
+.mode-card {
+    background: white; border-radius: 16px; padding: 25px; margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 4px solid #fff;
+}
+.mode-speaking { border-top: 6px solid #42a5f5; } /* 口语蓝 */
+.mode-written { border-top: 6px solid #ffa726; }  /* 笔试橙 */
+
+.mode-card h3 { 
+    margin-top: 0; color: #546e7a; border-bottom: 2px dashed #eceff1; padding-bottom: 15px; 
+}
+
+/* 课程选择按钮 */
+.lesson-btn {
+    display: block; width: 100%; padding: 16px; margin: 12px 0;
+    background-color: #f8f9fa; border: 2px solid #eceff1; border-radius: 12px;
+    text-align: left; font-size: 16px; font-weight: bold; color: #455a64;
+    position: relative;
+}
+.lesson-btn:hover {
+    background-color: #e3f2fd; border-color: #90caf9; transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(144, 202, 249, 0.3);
+}
+.lesson-btn::before { content: "📄 "; margin-right: 5px; }
+
+/* --- 4. 候考室 (欢迎卡片) --- */
+.welcome-card {
+    background: white; border-radius: 20px; padding: 40px 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; border: 4px solid #fff;
+}
+.hero-icon { font-size: 60px; margin-bottom: 15px; animation: bounce 2s infinite; }
+.main-title { color: #fb8c00; margin: 0 0 20px 0; font-size: 24px; }
+
+/* 选择器美化 */
+.selector-group { text-align: left; margin-bottom: 20px; }
+.selector-label { font-weight: bold; color: #555; display: block; margin-bottom: 8px; font-size: 14px; }
+
+select {
+    width: 100%; padding: 14px; font-size: 16px; border: 2px solid #cfd8dc;
+    border-radius: 10px; background: #fafafa; outline: none; appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto;
+}
+select:focus { border-color: #29b6f6; background: #fff; }
+
+/* 开始按钮 */
+#startButton, .start-btn {
+    background: #4caf50; color: white; border: none; padding: 16px 0; width: 100%;
+    border-radius: 30px; font-size: 20px; font-weight: bold; 
+    box-shadow: 0 4px 0 #2e7d32; margin-top: 10px;
+}
+#startButton:disabled { background: #cfd8dc; box-shadow: none; color: #90a4ae; transform: none; }
+
+/* --- 5. 答题通用界面 --- */
+/* 顶部固定栏 */
+#fixedHeader, .top-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.95); padding: 12px 20px; 
+    position: sticky; top: 0; z-index: 100; 
+    border-radius: 0 0 15px 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.student-badge { font-weight: bold; color: #37474f; font-size: 16px; }
+.student-badge span { color: #0288d1; }
+#timerDisplay, .timer-badge { 
+    font-family: monospace; font-weight: bold; color: #e65100; 
+    background: #fff3e0; padding: 5px 12px; border-radius: 15px; font-size: 18px;
+}
+
+/* 题目卡片 */
+.question-page, .question-card {
+    background: white; border-radius: 16px; padding: 25px; margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid #ffca28;
+    margin-top: 20px; position: relative;
+}
+.q-tag {
+    background: #ffca28; color: #5d4037; padding: 4px 10px;
+    border-radius: 8px; font-size: 12px; font-weight: bold; display: inline-block;
+}
+.q-text { font-size: 20px; font-weight: bold; color: #263238; margin: 15px 0; line-height: 1.5; }
+
+/* 图片 */
+.img-box { text-align: center; margin: 15px 0; background: #fafafa; padding: 10px; border-radius: 12px; }
+.img-box img, .question-image-style { max-width: 100%; max-height: 250px; border-radius: 8px; object-fit: contain; }
+
+/* --- 6. 口语打分 (Emoji) --- */
+.score-buttons, .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 20px; }
+.score-btn {
+    padding: 10px 0; border: none; border-radius: 8px; color: white;
+    font-size: 12px; display: flex; flex-direction: column; align-items: center;
+}
+.score-emoji { font-size: 22px; margin-bottom: 4px; }
+.s5, .score-5 { background: #4caf50; } 
+.s4, .score-4 { background: #8bc34a; }
+.s3, .score-3 { background: #fdd835; color: #333; } 
+.s2, .score-2 { background: #ff9800; } 
+.s1, .score-1 { background: #f44336; }
+
+/* --- 7. 笔试交互 --- */
+/* 选项 */
+.answer-option, .option-btn {
+    padding: 15px; background: white; border: 2px solid #eceff1; border-radius: 12px;
+    margin-bottom: 10px; font-size: 16px; font-weight: bold; color: #546e7a;
+    cursor: pointer; transition: all 0.1s;
+}
+.answer-option:active, .option-btn:active { transform: scale(0.98); }
+.selected-option, .option-selected { 
+    border-color: #29b6f6; background-color: #e1f5fe; color: #0277bd; 
+}
+
+/* 拖拽区 */
+.drag-target {
+    min-height: 60px; background: #fff8e1; border: 2px dashed #ffb74d; 
+    border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; 
+    margin-bottom: 15px; align-items: center;
+}
+.drag-source { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+.word-chip {
+    background: #fff; border: 2px solid #cfd8dc; padding: 8px 16px;
+    border-radius: 20px; font-weight: bold; color: #455a64; 
+    box-shadow: 0 3px 0 #b0bec5; cursor: pointer; user-select: none;
+}
+.word-chip:active { transform: translateY(3px); box-shadow: none; }
+
+/* --- 8. 结果与反馈 --- */
+.guide-box { 
+    background: #e8f5e9; padding: 12px; border-radius: 8px; color: #2e7d32; 
+    font-size: 15px; margin-top: 15px; border: 1px solid #c8e6c9; 
+}
+
+#scoreCard { 
+    display: none; text-align: center; background: white; padding: 40px 20px; 
+    border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+    max-width: 500px; margin: 30px auto; border: 4px solid #fff;
+}
+.result-icon { font-size: 80px; margin-bottom: 10px; animation: bounce 2s infinite; }
+.score-box { 
+    font-size: 60px; color: #2e7d32; font-weight: 800; margin: 20px 0; 
+    text-shadow: 2px 2px 0 #a5d6a7; 
+}
+.total-mark { font-size: 18px; color: #90a4ae; font-weight: normal; }
+
+.restart-btn { 
+    background: #039be5; color: white; border: none; padding: 12px 30px; 
+    border-radius: 30px; font-size: 16px; font-weight: bold; margin-top: 20px; 
+    box-shadow: 0 4px 0 #0277bd;
+}
+
+/* 返回按钮 */
+.home-link, .back-btn { 
+    background: #cfd8dc; color: #455a64; padding: 6px 15px; 
+    border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; 
+}
+
+/* 动画 */
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
