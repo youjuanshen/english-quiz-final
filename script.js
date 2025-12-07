@@ -1,163 +1,189 @@
-// ==================== 1. 全局配置 ====================
-const STUDENTS = [
-    "1. 张宇豪", "2. 张佳寒", "3. 张睿渊", "4. 张羽韬", "5. 张美茹",
-    "6. 张嘉钦", "7. 卢梦婷", "8. 张悦萱", "9. 张语涵", "10. 张英豪",
-    "11. 张志鹏", "12. 张智杰", "13. 张梓婷", "14. 张品琪", "15. 张诺依",
-    "16. 张雨泽", "17. 张依彤", "18. 张艺楠", "19. 张思彤", "20. 张子豪",
-    "21. 张梓亦", "22. 张皓鑫", "23. 张雨欣", "24. 张如欣", "25. 张柏涵",
-    "26. 张梓纯", "27. 张泽鑫"
-];
+// ================= 全局配置 =================
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxc8c4prsZZLY9vp-te4gH5twQNO1A8Ek3yROTNZeNs-7YhL60UojvMsQoceJUZ7LUP/exec";
 
-// Google Sheet URL
-const API_URL = "https://script.google.com/macros/s/AKfycbxc8c4prsZZLY9vp-te4gH5twQNO1A8Ek3yROTNZeNs-7YhL60UojvMsQoceJUZ7LUP/exec";
+let currentData = null;
+let currentMode = ''; // 'written' 或 'speaking'
+let currentQIndex = 0;
+let answers = {};
+let timerInterval;
+let timeLeft = 0;
 
-// 菜单配置
-const MENU = {
-    "speaking": {
-        title: "🗣️ 口语面试",
-        border: "5px solid #42a5f5",
-        lessons: [
-            // 👇 这里改成了 u1_l1.js
-            { name: "Unit 1 Lesson 1 (口语)", path: "data/speaking/u1_l1.js" }
-        ]
-    },
-    "written": {
-        title: "📝 笔试练习",
-        border: "5px solid #ffa726",
-        lessons: [
-            // 👇 这里也改成了 u1_l1.js
-            { name: "Unit 1 Lesson 1 (笔试)", path: "data/written/u1_l1.js" }
-        ]
-    }
+// 初始化引擎
+function initEngine(mode) {
+    currentMode = mode;
+    console.log("Engine started in mode: " + mode);
+}
+
+// 接收题库数据
+window.LOAD_QUIZ = function(data) {
+    currentData = data;
+    timeLeft = data.timeLimit || (currentMode === 'speaking' ? 300 : 540);
+    
+    // 数据加载后，刷新界面信息
+    const titleEl = document.getElementById('examTitle');
+    if(titleEl) titleEl.innerText = data.title;
+    
+    document.getElementById('loadingBox').style.display = 'none';
+    document.getElementById('setupBox').style.display = 'block';
 };
 
-// ==================== 2. 引擎逻辑 ====================
-let quizData = null, currStudent = "", totalScore = 0, answers = {}, timer = null, timeLeft = 0;
+// 加载题目脚本
+function loadPaper(path) {
+    document.getElementById('menuBox').style.display = 'none';
+    document.getElementById('loadingBox').style.display = 'block';
+    
+    const script = document.createElement('script');
+    // 自动补全路径：如果是 written 模式，去 data/written/ 找
+    script.src = `data/${currentMode}/${path}`; 
+    script.onerror = () => alert("❌ 找不到题目文件：" + script.src);
+    document.body.appendChild(script);
+}
 
-window.onload = initMenu;
+// 开始考试
+function startExam() {
+    const student = document.getElementById('studentSelector').value;
+    if(!student) { alert("请先选择名字！"); return; }
+    
+    document.getElementById('setupBox').style.display = 'none';
+    document.getElementById('quizInterface').style.display = 'block';
+    
+    // 显示学生名
+    document.getElementById('studentNameDisplay').innerText = student;
+    
+    renderQuestion();
+    startTimer();
+}
 
-function initMenu() {
-    clearInterval(timer);
-    let html = `<div class="container"><div class="header-banner"><h1>三年级英语闯关赛</h1><p>请选择模式</p></div>`;
-    for(let k in MENU) {
-        html += `<div class="mode-card" style="border-top:${MENU[k].border}"><h3>${MENU[k].title}</h3>`;
-        MENU[k].lessons.forEach(l => html += `<button class="lesson-btn" onclick="loadQ('${l.path}')">${l.name}</button>`);
+// 渲染题目 (核心逻辑)
+function renderQuestion() {
+    const q = currentData.questions[currentQIndex];
+    const total = currentData.questions.length;
+    
+    // 1. 进度
+    document.getElementById('progressText').innerText = `Question ${currentQIndex + 1} / ${total}`;
+    document.getElementById('progressBar').style.width = `${((currentQIndex + 1) / total) * 100}%`;
+    
+    // 2. 按钮状态
+    document.getElementById('btnPrev').disabled = (currentQIndex === 0);
+    if(currentQIndex === total - 1) {
+        document.getElementById('btnNext').style.display = 'none';
+        document.getElementById('btnSubmit').style.display = 'inline-block';
+    } else {
+        document.getElementById('btnNext').style.display = 'inline-block';
+        document.getElementById('btnSubmit').style.display = 'none';
+    }
+
+    // 3. 构建 HTML
+    let html = `<h3 class="q-text">${currentQIndex + 1}. ${q.text}</h3>`;
+
+    // 图片 (Banner)
+    if (q.imageUri) {
+        html += `<img src="img/${q.imageUri}" style="max-width:100%; border-radius:10px; margin-bottom:10px;">`;
+    }
+    
+    // 听力
+    if (q.audioText) {
+         html += `<button class="audio-btn" onclick="speak('${q.audioText}')">🔊 播放读音</button>`;
+    }
+
+    // --- 分模式渲染选项 ---
+    if (currentMode === 'written') {
+        // 笔试模式：显示选项
+        html += `<div class="options-list">`;
+        q.options.forEach(opt => {
+            let displayContent = opt;
+            
+            // 🔥 图片选项自动识别逻辑 🔥
+            if (opt.startsWith('image:')) {
+                // 拿到文件名，比如 "u1_banana"
+                let imgName = opt.split(':')[1].trim(); 
+                // 强制转为 img 标签
+                displayContent = `<img src="img/${imgName}.png" class="opt-img">`; 
+            }
+
+            const isSelected = answers['Q'+q.qNum] === opt ? 'selected' : '';
+            html += `<div class="option-item ${isSelected}" onclick="choose('${q.qNum}', '${opt}')">
+                        ${displayContent}
+                     </div>`;
+        });
+        html += `</div>`;
+    } else {
+        // 口语模式：显示参考答案 + Emoji 打分
+        html += `<div class="teacher-guide">💡 参考: ${q.guide}</div>`;
+        html += `<div class="emoji-row">`;
+        [1,2,3,4,5].forEach(score => {
+             const active = answers['Q'+q.qNum] === score ? 'active' : '';
+             html += `<span class="emoji-btn ${active}" onclick="rate('${q.qNum}', ${score})">${['😶','🙂','🤔','😃','🤩'][score-1]}</span>`;
+        });
         html += `</div>`;
     }
-    document.getElementById('app').innerHTML = html + `</div>`;
+
+    document.getElementById('qContent').innerHTML = html;
 }
 
-function loadQ(path) {
-    document.getElementById('app').innerHTML = `<div style="text-align:center;padding:50px">⏳ 正在加载...<br><small>${path}</small></div>`;
-    let s = document.createElement('script');
-    s.src = path;
-    s.onload = () => renderSelect();
-    s.onerror = () => alert("找不到文件: " + path);
-    document.body.appendChild(s);
+// 交互动作
+function choose(qid, val) {
+    answers['Q'+qid] = val;
+    renderQuestion(); // 重绘以显示选中状态
 }
 
-window.LOAD_QUIZ = function(data) { quizData = data; }
-
-function renderSelect() {
-    let opts = STUDENTS.map(s => `<option value="${s}">${s}</option>`).join('');
-    document.getElementById('app').innerHTML = `
-        <div class="container"><div class="welcome-card"><div style="font-size:50px">🎓</div>
-        <h2>${quizData.title}</h2><p>请选择姓名</p>
-        <select id="stu">${opts}</select>
-        <button class="start-btn" onclick="start()">🚀 开始</button>
-        <div style="margin-top:20px"><a href="#" onclick="initMenu()">返回菜单</a></div>
-        </div></div>`;
+function rate(qid, score) {
+    answers['Q'+qid] = score;
+    renderQuestion();
 }
 
-function start() {
-    currStudent = document.getElementById('stu').value;
-    totalScore = 0; answers = {};
-    if(quizData.mode === 'written') { timeLeft = quizData.timeLimit || 540; startTimer(); }
-    renderQuiz();
+function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
+function nextQ() { if(currentQIndex < currentData.questions.length - 1) { currentQIndex++; renderQuestion(); } }
+
+function speak(text) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    window.speechSynthesis.speak(u);
 }
 
-function renderQuiz() {
-    let isSpeak = quizData.mode === 'speaking';
-    let html = `
-        <div class="top-bar"><span>👤 ${currStudent}</span><span id="timer">${isSpeak?'':formatTime(timeLeft)}</span>
-        <button onclick="initMenu()">退出</button></div>
-        <div class="container quiz-body">`;
-    
-    quizData.questions.forEach((q, i) => {
-        let img = q.image ? `<div class="img-box"><img src="${q.image}"></div>` : '';
-        let audio = q.audio ? `<div style="text-align:center"><button onclick="speak('${q.audio}')">🔊 播放</button></div>` : '';
-        
-        html += `<div class="question-card" id="card-${i}"><div class="q-tag">Q${q.qNum}</div>
-                 <div class="q-text">${q.text}</div>${img}${audio}`;
-
-        if(isSpeak) {
-            html += `<div style="background:#fff3e0;padding:10px;margin:10px 0;border-radius:5px;color:#e65100">💡 参考: ${q.guide}</div>
-                     <div id="act-${i}" class="score-buttons">
-                        ${[5,4,3,2,1].map(s=>`<button class="score-btn s${s}" onclick="rate(${i},${s})">${s}</button>`).join('')}
-                     </div><div id="fb-${i}" class="feedback" style="display:none"></div>`;
-        } else {
-            if(q.type === 'select') {
-                html += `<div>`;
-                q.options.forEach(o => {
-                    let txt = o.startsWith('img/') ? `<img src="${o}" style="height:50px">` : o;
-                    html += `<div class="answer-option" onclick="selOpt(${i}, '${o.replace(/'/g,"\\'")}', this)">${txt}</div>`;
-                });
-                html += `</div>`;
-            } else if(q.type === 'drag') {
-                html += `<div style="border:2px dashed #orange;padding:10px;min-height:40px;margin-bottom:10px" id="t-${i}"></div>
-                         <div style="display:flex;gap:5px" id="s-${i}">${q.words.map(w=>`<div style="background:#eee;padding:5px 10px;border-radius:10px" onclick="move(this,'s-${i}','t-${i}',${i})">${w}</div>`).join('')}</div>`;
-            }
-        }
-        html += `</div>`;
-    });
-
-    if(isSpeak) html += `<div class="footer-bar">总分: <span id="score">0</span></div>`;
-    else html += `<div class="footer-bar"><button class="start-btn" onclick="submit()">交卷</button></div>`;
-    
-    document.getElementById('app').innerHTML = html + `</div>`;
+// 计时器
+function startTimer() {
+    timerInterval = setInterval(() => {
+        if(timeLeft <= 0) { clearInterval(timerInterval); submit(); return; }
+        timeLeft--;
+        const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+        const s = (timeLeft%60).toString().padStart(2,'0');
+        document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    }, 1000);
 }
 
-// 交互逻辑
-function rate(i, s) {
-    document.getElementById(`act-${i}`).style.display='none';
-    let fb = document.getElementById(`fb-${i}`);
-    fb.style.display='block'; fb.innerText = `✅ 得分: ${s}`; fb.style.background='#e8f5e9'; fb.style.color='green';
-    totalScore += s; document.getElementById('score').innerText = totalScore;
-    if(i === quizData.questions.length-1) sendData('Speaking', totalScore);
-}
-function selOpt(i, v, el) {
-    answers[i] = v;
-    Array.from(el.parentElement.children).forEach(c=>c.classList.remove('selected-option'));
-    el.classList.add('selected-option');
-}
-function move(el, sid, tid, i) {
-    let t = document.getElementById(tid), s = document.getElementById(sid);
-    (el.parentElement.id===sid ? t : s).appendChild(el);
-    answers[i] = Array.from(t.children).map(c=>c.innerText).join(' ');
-}
+// 交卷
 function submit() {
-    clearInterval(timer);
+    clearInterval(timerInterval);
+    document.getElementById('quizInterface').style.display = 'none';
+    document.getElementById('submittingBox').style.display = 'block';
+
     let score = 0;
-    quizData.questions.forEach((q, i) => {
-        let card = document.getElementById(`card-${i}`);
-        let right = (answers[i] === q.correct) || (q.type==='drag' && answers[i]===q.correct);
-        if(right) score+=5;
-        let div = document.createElement('div');
-        div.className = 'feedback';
-        div.style.background = right ? '#e8f5e9' : '#ffebee';
-        div.style.color = right ? 'green' : 'red';
-        div.innerHTML = right ? '✅ 正确' : `❌ 错误 (答案: ${q.correct})`;
-        card.appendChild(div);
+    // 简单算分
+    if(currentMode === 'speaking') {
+        Object.values(answers).forEach(v => score += parseInt(v));
+    } else {
+        currentData.questions.forEach(q => {
+            if(answers['Q'+q.qNum] === q.correct) score += 5;
+        });
+    }
+
+    const payload = {
+        studentName: document.getElementById('studentNameDisplay').innerText,
+        examType: currentMode,
+        lessonTitle: currentData.title,
+        score: score,
+        details: JSON.stringify(answers)
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    }).then(() => {
+        document.getElementById('submittingBox').style.display = 'none';
+        document.getElementById('resultBox').style.display = 'block';
+        document.getElementById('finalScore').innerText = score;
     });
-    alert(`得分: ${score}`);
-    sendData('Written', score);
 }
-function sendData(type, score) {
-    fetch(API_URL, {
-        method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({studentName:currStudent, examType:type, lessonTitle:quizData.title, score:score})
-    });
-}
-function speak(txt) { let u=new SpeechSynthesisUtterance(txt); u.lang='en-US'; window.speechSynthesis.speak(u); }
-function startTimer() { timer=setInterval(()=>{ timeLeft--; document.getElementById('timer').innerText=formatTime(timeLeft); if(timeLeft<=0) submit(); },1000); }
-function formatTime(s) { return Math.floor(s/60).toString().padStart(2,'0')+':'+(s%60).toString().padStart(2,'0'); }
