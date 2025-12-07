@@ -11,20 +11,22 @@ const STUDENTS = [
 // Google Sheet URL
 const API_URL = "https://script.google.com/macros/s/AKfycbxc8c4prsZZLY9vp-te4gH5twQNO1A8Ek3yROTNZeNs-7YhL60UojvMsQoceJUZ7LUP/exec";
 
-// 菜单配置 (请注意这里的文件路径！)
+// 菜单配置
 const MENU = {
     "speaking": {
         title: "🗣️ 口语面试",
         border: "5px solid #42a5f5",
         lessons: [
-            { name: "Unit 1 Lesson 1 (口语)", path: "data/speaking/u1.js" }
+            // 👇 这里改成了 u1_l1.js
+            { name: "Unit 1 Lesson 1 (口语)", path: "data/speaking/u1_l1.js" }
         ]
     },
     "written": {
         title: "📝 笔试练习",
         border: "5px solid #ffa726",
         lessons: [
-            { name: "Unit 1 Lesson 1 (笔试)", path: "data/written/u1.js" }
+            // 👇 这里也改成了 u1_l1.js
+            { name: "Unit 1 Lesson 1 (笔试)", path: "data/written/u1_l1.js" }
         ]
     }
 };
