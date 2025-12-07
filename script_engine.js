@@ -1,4 +1,4 @@
-// ================= 全局配置 (V7.1 Final) =================
+// ================= 全局配置 (V7.1 最终修复版) =================
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxc8c4prsZZLY9vp-te4gH5twQNO1A8Ek3yROTNZeNs-7YhL60UojvMsQoceJUZ7LUP/exec";
 
 let currentData = null;
@@ -11,17 +11,17 @@ let timeLeft = 0;
 function initEngine(mode) {
     currentMode = mode;
     console.log("Engine started V7.1: " + mode);
-    // 强制弹窗检测：看到这个说明新代码生效了
-    // alert("新引擎 V7.1 已加载！"); 
 }
 
 window.LOAD_QUIZ = function(data) {
     currentData = data;
     timeLeft = data.timeLimit || 540;
     
+    // 刷新标题
     const titleEl = document.getElementById('examTitle');
     if(titleEl) titleEl.innerText = data.title;
     
+    // 界面切换
     toggleDisplay('loadingBox', false);
     toggleDisplay('menuBox', false);
     toggleDisplay('setupBox', true);
@@ -33,6 +33,8 @@ function loadPaper(path) {
     
     const script = document.createElement('script');
     let folder = currentMode === 'speaking' ? 'data/speaking/' : 'data/written/';
+    
+    // 路径处理
     if (path.indexOf('/') === -1) { script.src = folder + path; } 
     else { script.src = path; }
     
@@ -47,44 +49,54 @@ function loadPaper(path) {
 function startExam() {
     const student = document.getElementById('studentSelector').value;
     if(!student) { alert("请先选择名字！"); return; }
+    
     toggleDisplay('setupBox', false);
     toggleDisplay('quizInterface', true);
+    
     document.getElementById('studentNameDisplay').innerText = student;
     currentQIndex = 0;
     answers = {};
-    renderQuestion();
+    renderQuestion(); // 渲染第一题
     startTimer();
 }
 
+// ⭐⭐ 核心渲染函数 (听力按钮和分页都在这里) ⭐⭐
 function renderQuestion() {
     const q = currentData.questions[currentQIndex];
     const total = currentData.questions.length;
     
+    // 1. 更新进度条
     document.getElementById('progressText').innerText = `Question ${currentQIndex + 1} / ${total}`;
     document.getElementById('progressBar').style.width = `${((currentQIndex + 1) / total) * 100}%`;
     
+    // 2. 控制翻页按钮 (隐藏/显示)
     document.getElementById('btnPrev').disabled = (currentQIndex === 0);
+    
     if(currentQIndex === total - 1) {
+        // 最后一题：显示交卷，隐藏下一题
         toggleDisplay('btnNext', false);
         toggleDisplay('btnSubmit', true);
         document.getElementById('btnSubmit').style.display = 'inline-block'; 
     } else {
+        // 普通题目：显示下一题，隐藏交卷
         toggleDisplay('btnNext', true);
         toggleDisplay('btnSubmit', false);
         document.getElementById('btnNext').style.display = 'inline-block';
     }
 
+    // 3. 生成题目 HTML
     let html = '';
     if (q.part) html += `<div style="font-size:12px; color:#999; font-weight:bold; text-transform:uppercase; margin-bottom:5px;">Part ${q.part}</div>`;
+    
     html += `<h3 class="q-text">${q.qNum}. ${q.text}</h3>`;
 
-    // 🔊 听力按钮逻辑
+    // 🔊 听力按钮逻辑 (只要有 audioText 就显示)
     if (q.audioText) {
         const safeText = q.audioText.replace(/'/g, "\\'");
         html += `<button class="audio-btn" onclick="speak('${safeText}')" style="margin-bottom: 20px;">🔊 播放录音 (Listen)</button>`;
     }
 
-    // 🖼️ 题目大图
+    // 🖼️ 图片逻辑
     if (q.imageUri) html += `<img src="img/${q.imageUri}" style="max-width:100%; border-radius:10px; margin-bottom:10px;">`;
     else if (q.imageKey && currentData.images) html += `<img src="${currentData.images[q.imageKey]}" style="max-width:100%; border-radius:10px; margin-bottom:10px;">`;
 
@@ -95,12 +107,10 @@ function renderQuestion() {
             let displayContent = opt;
             let val = opt;
             
-            // 🔥 图片选项核心逻辑 🔥
-            // 您的 u1_l1.js 写的是 image:u1_banana
-            // 下面的逻辑会把它变成 img/u1_banana.png
+            // 自动识别 image: 前缀
             if (opt.startsWith('image:')) {
                 let imgKey = opt.split(':')[1].trim(); 
-                let imgSrc = `img/${imgKey}.png`; // 直接拼接路径
+                let imgSrc = `img/${imgKey}.png`; 
                 displayContent = `<img src="${imgSrc}" class="opt-img" style="height:60px; vertical-align:middle">`; 
             }
 
@@ -109,6 +119,7 @@ function renderQuestion() {
         });
         html += `</div>`;
     } else {
+        // 口语模式
         html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
         html += `<div class="emoji-row">`;
         [1,2,3,4,5].forEach(score => {
@@ -117,9 +128,12 @@ function renderQuestion() {
         });
         html += `</div>`;
     }
+    
+    // 将 HTML 放入页面
     document.getElementById('qContent').innerHTML = html;
 }
 
+// ================= 交互动作 =================
 function choose(qid, val) { answers['Q'+qid] = val; renderQuestion(); }
 function rate(qid, score) { answers['Q'+qid] = score; renderQuestion(); }
 function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
