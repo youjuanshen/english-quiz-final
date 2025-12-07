@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>口语面试 (Speaking)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container teacher-theme">
+    
+    <div id="menuBox" class="card">
+        <h2>🗣️ 口语面试 (Teacher Mode)</h2>
+        <select id="courseSelect" onchange="loadPaper(this.value)">
+            <option value="" disabled selected>请选择考核课程...</option>
+            
+            <optgroup label="Unit 1: Hello!">
+                <option value="u1_l1.js">Unit 1 Lesson 1: Nice to meet you</option>
+                <option value="u1_l2.js">Unit 1 Lesson 2: What's your name?</option>
+                <option value="u1_l3.js">Unit 1 Lesson 3: How are you?</option>
+                <option value="u1_l4.js">Unit 1 Lesson 4: Have a good day!</option>
+            </optgroup>
+
+            <optgroup label="Unit 2: Numbers">
+                <option value="u2_l1.js">Unit 2 Lesson 1: Let's play!</option>
+                <option value="u2_l2.js">Unit 2 Lesson 2: How many ducks?</option>
+                <option value="u2_l3.js">Unit 2 Lesson 3: How old are you?</option>
+                <option value="u2_l4.js">Unit 2 Lesson 4: Phone number</option>
+            </optgroup>
+
+            <optgroup label="Unit 3: Colors">
+                <option value="u3_l1.js">Unit 3 Lesson 1: It's green</option>
+                <option value="u3_l2.js">Unit 3 Lesson 2: What color is it?</option>
+                <option value="u3_l3.js">Unit 3 Lesson 3: Show me red</option>
+                <option value="u3_l4.js">Unit 3 Lesson 4: Colorful flowers</option>
+            </optgroup>
+
+            <optgroup label="Unit 4: Family">
+                <option value="u4_l1.js">Unit 4 Lesson 1: My father</option>
+                <option value="u4_l2.js">Unit 4 Lesson 2: Who is he?</option>
+                <option value="u4_l3.js">Unit 4 Lesson 3: Who are they?</option>
+                <option value="u4_l4.js">Unit 4 Lesson 4: I love my family</option>
+            </optgroup>
+        </select>
+        </div>
+
+    <div id="loadingBox" class="hidden text-center">
+        <p>正在读取题库...</p>
+    </div>
+
+    <div id="setupBox" class="card hidden">
+        <h3 id="examTitle">...</h3>
+        <select id="studentSelector">
+            <option value="" disabled selected>选择面试学生</option>
+            </select>
+        <button class="btn-primary" onclick="startExam()">开始面试</button>
+    </div>
+
+    <div id="quizInterface" class="hidden">
+        <div class="header-bar">
+            <span id="studentNameDisplay">Student</span>
+            <span id="timerDisplay" class="timer">05:00</span>
+        </div>
+        
+        <div class="progress-bar-bg"><div id="progressBar"></div></div>
+        <div id="progressText" class="text-small"></div>
+
+        <div class="card question-card">
+            <div id="qContent"></div>
+        </div>
+
+        <div class="nav-bar">
+            <button id="btnPrev" onclick="prevQ()">⬅️ 上一题</button>
+            <button id="btnNext" onclick="nextQ()">下一题 ➡️</button>
+            <button id="btnSubmit" onclick="submit()" class="btn-success hidden">结束打分 (Submit)</button>
+        </div>
+    </div>
+
+    <div id="submittingBox" class="hidden text-center">
+        <p>☁️ 正在上传分数...</p>
+    </div>
+    <div id="resultBox" class="card hidden text-center">
+        <h1>完成</h1>
+        <h1 class="score-text" id="finalScore">?</h1>
+        <p>分</p>
+        <a href="speaking.html" class="btn-primary">下一位同学</a>
+    </div>
+
+</div>
+
+<script src="script_engine.js"></script>
+
+<script>
+    // 1. 启动引擎 - 口语模式
+    // 引擎会自动去 data/speaking/ 文件夹寻找题目
+    initEngine('speaking');
+
+    // 2. 📋 完整学生名单 (27人)
+    const STUDENTS = [
+        "1. 张宇豪", "2. 张佳寒", "3. 张睿渊", "4. 张羽韬", "5. 张美茹",
+        "6. 张嘉钦", "7. 卢梦婷", "8. 张悦萱", "9. 张语涵", "10. 张英豪",
+        "11. 张志鹏", "12. 张智杰", "13. 张梓婷", "14. 张品琪", "15. 张诺依",
+        "16. 张雨泽", "17. 张依彤", "18. 张艺楠", "19. 张思彤", "20. 张子豪",
+        "21. 张梓亦", "22. 张皓鑫", "23. 张雨欣", "24. 张如欣", "25. 张柏涵",
+        "26. 张梓纯", "27. 张泽鑫"
+    ];
+
+    // 3. 自动填充下拉菜单
+    const sel = document.getElementById('studentSelector');
+    STUDENTS.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        sel.appendChild(opt);
+    });
+</script>
+
+</body>
+</html>
