@@ -1,0 +1,32 @@
+body { font-family: 'Comic Sans MS', sans-serif; background-color: #e3f2fd; margin: 0; padding: 20px; color: #333; }
+.container { max-width: 600px; margin: 0 auto; padding-top: 20px; }
+
+/* 首页 */
+.header-banner { text-align: center; margin-bottom: 30px; }
+.header-banner h1::before { content: "🦁"; display: block; font-size: 60px; margin-bottom: 10px; animation: bounce 2s infinite; }
+.mode-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.lesson-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #f1f8e9; border: 1px solid #c5e1a5; border-radius: 12px; text-align: left; cursor: pointer; font-weight: bold; font-size: 16px; }
+
+/* 候考室 */
+.welcome-card { background: white; border-radius: 20px; padding: 30px; text-align: center; margin-top: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+select { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0 20px; }
+.start-btn { background: #4caf50; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; }
+
+/* 答题区 */
+.question-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.q-tag { background: #29b6f6; color: white; padding: 4px 10px; border-radius: 10px; font-size: 12px; font-weight: bold; }
+.q-text { font-size: 18px; font-weight: bold; margin: 15px 0; }
+.img-box img { max-width: 100%; max-height: 200px; border-radius: 8px; }
+.score-buttons { display: flex; gap: 5px; margin-top: 15px; }
+.score-btn { flex: 1; padding: 10px 0; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+.s5{background:#4caf50}.s4{background:#8bc34a}.s3{background:#ffc107;color:#333}.s2{background:#ff9800}.s1{background:#f44336}
+
+/* 笔试选项 */
+.answer-option { padding: 12px; border: 2px solid #eee; border-radius: 10px; margin-top: 10px; cursor: pointer; }
+.selected-option { background: #e3f2fd; border-color: #2196f3; }
+.feedback { margin-top: 10px; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; }
+
+.footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; text-align: center; border-top: 1px solid #eee; font-weight: bold; z-index: 99; }
+.quiz-body { padding-bottom: 80px; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.9); padding: 10px 20px; position: sticky; top: 0; z-index: 99; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
