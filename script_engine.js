@@ -1,6 +1,6 @@
 // ================= 全局配置 (V12.1 已更新链接) =================
 // ⚠️ 这里已经替换成了您刚刚发给我的新地址
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6eQCiusmAdAOB0CQXZbtLTKejeZ4QA_o5RMJXQIbnleKTQTxkTCt3b-WBoVsRBIzP/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX-0dpSTmbd-NkhLTyK6u6l6U7KBU_m8CsVOt4p-2lS5FfPSfrAEbIcVjk2fNDjn5-/exec";
 
 let currentData = null;
 let currentMode = '';
