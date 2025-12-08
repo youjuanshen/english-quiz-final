@@ -3,21 +3,21 @@ window.LOAD_QUIZ({
     mode: "written",
     timeLimit: 540, // 9分钟
 
-    // ✅ 图片资源：已确认去掉了 'img/' 前缀，直接引用文件名
-    // ⚠️ 请确保 u3_cat.png 等所有图片都在文件夹根目录
+    // ✅ 关键修复：
+    // 你的截图显示图片都在 'img' 文件夹里，所以必须加上 'img/' 前缀！
     images: {
-        'RedLight': 'u3_red_light.png',
-        'GreenLight': 'u3_green_light.png',
-        'StopSign': 'u3_stop_sign.png',
-        'Rabbit': 'u3_rabbit.png',
-        'Question': 'u3_question.png',
-        'YellowLight': 'u3_yellow_light.png',
-        'TrafficLight': 'u3_traffic_lights.png',
-        'Dog': 'u3_dog.png',
-        'Cat': 'u3_cat.png' 
+        'RedLight': 'img/u3_red_light.png',
+        'GreenLight': 'img/u3_green_light.png',
+        'StopSign': 'img/u3_stop_sign.png',
+        'Rabbit': 'img/u3_rabbit.png',
+        'Question': 'img/u3_question.png',
+        'YellowLight': 'img/u3_yellow_light.png',
+        'TrafficLight': 'img/u3_traffic_lights.png',
+        'Dog': 'img/u3_dog.png',
+        'Cat': 'img/u3_cat.png' 
     },
 
-    // ✅ 题目数据 (总分75分 = 25 + 25 + 25)
+    // ✅ 题目数据 (Unit 3)
     questions: [
         // ================= Part A: Listening (听力 25分) =================
         { 
@@ -27,6 +27,7 @@ window.LOAD_QUIZ({
             score: 5, 
             text: '听录音，选出正确的图片。', 
             audioText: 'The light is red.', 
+            // 这里的选项引用上面的 key，不用改
             options: ['image:GreenLight', 'image:RedLight', 'image:YellowLight', 'image:TrafficLight'], 
             correct: 'image:RedLight' 
         },
@@ -98,7 +99,6 @@ window.LOAD_QUIZ({
             score: 5, 
             text: '看图，选出描述正确的句子。', 
             imageKey: 'RedLight', 
-            // 干扰项已简化为 "It is a dog."
             options: ['It is green.', 'The light is red.', 'It is a dog.', 'Let\'s go.'], 
             correct: 'The light is red.' 
         },
@@ -129,7 +129,6 @@ window.LOAD_QUIZ({
             score: 5, 
             text: '看图，选出图片对应的单词 (Stop Sign)。', 
             imageKey: 'StopSign', 
-            // 选项已简化为常见词
             options: ['go', 'stop', 'red', 'green'], 
             correct: 'stop' 
         },
