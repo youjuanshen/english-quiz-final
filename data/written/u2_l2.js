@@ -1,5 +1,5 @@
 window.LOAD_QUIZ({
-    title: "Unit 1 Lesson 2: What's your name?",
+    title: "Unit 1 Lesson 2: What's your name? (测试版)", // 加个尾巴,
     timeLimit: 540,
     // CRITICAL: NO images object here! System handles it.
 
