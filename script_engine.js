@@ -1,6 +1,6 @@
 // ================= 全局配置 (V13.0 交互升级版) =================
 // ⚠️ 请确认这里是您最新的、可用的 Google Script 链接
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS2hPOxtaPIzPKky4JwbQOBB7CRgFVkbHgjc6cNm0opRV7nxDJIm9GmoCB6mwYun6r/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-A33EvU8ZlvfYwwguSEFyu8QdVfcNymYnMC-XlCDnA6h6_7UcMGhtstIts2ml5fml/exec";
 
 let currentData = null;
 let currentMode = '';
