@@ -180,11 +180,26 @@ function moveWord(el, targetId, sourceId, qid) {
     enableNavButtons(sentence.length > 0);
 }
 
+// 新代码（请用此段替换旧的 rate 函数）
 // 交互: 口语评分 (点击后启用按钮)
-function rate(qid, score) { 
-    answers['Q'+qid] = score; 
-    renderQuestion(); 
-    enableNavButtons(true);
+function rate(qid, score) { 
+    answers['Q'+qid] = score; 
+    
+    // 1. 直接更新 UI 上的选中状态 (无需重新渲染整个题目)
+    const qContent = document.getElementById('qContent');
+    if (currentMode === 'speaking' && qContent) { // 仅对口语题进行此操作
+        Array.from(qContent.querySelectorAll('.emoji-btn')).forEach((btn, index) => {
+            const btnScore = index + 1; 
+            if (btnScore === score) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+    
+    // 2. 启用导航按钮 (这是最关键的一步，确保操作后可以进入下一题/交卷)
+    enableNavButtons(true);
 }
 
 function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
