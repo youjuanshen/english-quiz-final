@@ -25,9 +25,11 @@ window.LOAD_QUIZ = function(data) {
 };
 
 function loadPaper(path) {
-    toggleDisplay('menuBox', false);
+    // 这里原来的那行删掉了
     toggleDisplay('loadingBox', true);
+    
     const script = document.createElement('script');
+    // ... 后面的保持不变;
     let folder = currentMode === 'speaking' ? 'data/speaking/' : 'data/written/';
     if (path.indexOf('/') === -1) { script.src = folder + path; } else { script.src = path; }
     script.onerror = () => { alert("❌ 文件未找到: " + script.src); location.reload(); };
