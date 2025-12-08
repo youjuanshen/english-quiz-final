@@ -11,89 +11,88 @@
 <div class="container student-theme">
     
     <div id="menuBox" class="card">
-        <h2 style="font-size:32px;">🦁 准备好了吗？</h2>
-        
-        <div class="big-select-group">
-            <label class="big-label">① 选择你要挑战的关卡：</label>
-            <select id="courseSelect" onchange="loadPaper(this.value)">
-                <option value="" disabled selected>👉 点这里选择课程</option>
-                
-                <optgroup label="Unit 1: Hello!">
-                    <option value="u1_l1.js">Unit 1 Lesson 1</option>
-                    <option value="u1_l2.js">Unit 1 Lesson 2</option>
-                    <option value="u1_l3.js">Unit 1 Lesson 3</option>
-                    <option value="u1_l4.js">Unit 1 Lesson 4</option>
-                </optgroup>
+        <h2>📝 笔试挑战</h2>
+        <select id="courseSelect" onchange="loadPaper(this.value)">
+            <option value="" disabled selected>请选择课程...</option>
+            
+            <optgroup label="Unit 1: Hello!">
+                <option value="u1_l1.js">Unit 1 Lesson 1: Nice to meet you</option>
+                <option value="u1_l2.js">Unit 1 Lesson 2: What's your name?</option>
+                <option value="u1_l3.js">Unit 1 Lesson 3: How are you?</option>
+                <option value="u1_l4.js">Unit 1 Lesson 4: Have a good day!</option>
+            </optgroup>
 
-                <optgroup label="Unit 2: Numbers">
-                    <option value="u2_l1.js">Unit 2 Lesson 1</option>
-                    <option value="u2_l2.js">Unit 2 Lesson 2</option>
-                    <option value="u2_l3.js">Unit 2 Lesson 3</option>
-                    <option value="u2_l4.js">Unit 2 Lesson 4</option>
-                </optgroup>
+            <optgroup label="Unit 2: Numbers">
+                <option value="u2_l1.js">Unit 2 Lesson 1: Let's play!</option>
+                <option value="u2_l2.js">Unit 2 Lesson 2: How many ducks?</option>
+                <option value="u2_l3.js">Unit 2 Lesson 3: How old are you?</option>
+                <option value="u2_l4.js">Unit 2 Lesson 4: Phone number</option>
+            </optgroup>
 
-                <optgroup label="Unit 3: Colors">
-                    <option value="u3_l1.js">Unit 3 Lesson 1</option>
-                    <option value="u3_l2.js">Unit 3 Lesson 2</option>
-                    <option value="u3_l3.js">Unit 3 Lesson 3</option>
-                    <option value="u3_l4.js">Unit 3 Lesson 4</option>
-                </optgroup>
+            <optgroup label="Unit 3: Colors">
+                <option value="u3_l1.js">Unit 3 Lesson 1: It's green</option>
+                <option value="u3_l2.js">Unit 3 Lesson 2: What color is it?</option>
+                <option value="u3_l3.js">Unit 3 Lesson 3: Show me red</option>
+                <option value="u3_l4.js">Unit 3 Lesson 4: Colorful flowers</option>
+            </optgroup>
 
-                <optgroup label="Unit 4: Family">
-                    <option value="u4_l1.js">Unit 4 Lesson 1</option>
-                    <option value="u4_l2.js">Unit 4 Lesson 2</option>
-                    <option value="u4_l3.js">Unit 4 Lesson 3</option>
-                    <option value="u4_l4.js">Unit 4 Lesson 4</option>
-                </optgroup>
-            </select>
+            <optgroup label="Unit 4: Family">
+                <option value="u4_l1.js">Unit 4 Lesson 1: My father</option>
+                <option value="u4_l2.js">Unit 4 Lesson 2: Who is he?</option>
+                <option value="u4_l3.js">Unit 4 Lesson 3: Who are they?</option>
+                <option value="u4_l4.js">Unit 4 Lesson 4: I love my family</option>
+            </optgroup>
+        </select>
         </div>
-
-        <div class="big-select-group">
-            <label class="big-label">② 找到你的名字：</label>
-            <select id="studentSelector">
-                <option value="" disabled selected>👤 点这里找名字</option>
-                </select>
-        </div>
-
-        <button class="btn-primary" onclick="startExam()">🚀 开始挑战！</button>
-    </div>
 
     <div id="loadingBox" class="hidden text-center">
-        <div class="cute-loader">⏳</div>
-        <p style="font-size:20px; font-weight:bold; color:#00bcd4">试卷加载中...</p>
+        <p>正在读取试卷...</p>
     </div>
 
-    <div id="setupBox" class="hidden"></div>
+    <div id="setupBox" class="card hidden">
+        <h3 id="examTitle">...</h3>
+        <select id="studentSelector">
+            <option value="" disabled selected>我是谁？(选择名字)</option>
+        </select>
+        <button class="btn-primary" onclick="startExam()">开始答题 🚀</button>
+    </div>
 
     <div id="quizInterface" class="hidden">
-        <div class="card">
-            <div class="header-bar" style="margin-bottom:20px;">
-                <span id="studentNameDisplay" style="color:#00bcd4; font-size:20px;">同学</span>
-                <span id="timerDisplay" class="timer" style="background:#ff9800; color:white; padding:5px 15px; border-radius:15px;">00:00</span>
-            </div>
-            
-            <div id="progressText" class="text-small">Question 1 / 10</div>
-            <div class="progress-bar-bg"><div id="progressBar"></div></div>
+        <div class="header-bar">
+            <span id="studentNameDisplay">Student</span>
+            <span id="timerDisplay" class="timer">00:00</span>
+        </div>
+        
+        <div class="progress-bar-bg"><div id="progressBar"></div></div>
+        <div id="progressText" class="text-small"></div>
 
+        <div class="card question-card">
             <div id="qContent"></div>
         </div>
 
         <div class="nav-bar">
             <button id="btnPrev" onclick="prevQ()">⬅️ 上一题</button>
             <button id="btnNext" onclick="nextQ()">下一题 ➡️</button>
-            <button id="btnSubmit" onclick="submit()" class="hidden">✅ 交卷</button>
+            <button id="btnSubmit" onclick="submit()" class="btn-success hidden">✅ 交卷</button>
         </div>
     </div>
 
     <div id="submittingBox" class="card hidden text-center"></div>
-    <div id="resultBox" class="card hidden text-center"></div>
+    <div id="resultBox" class="card hidden text-center">
+        <h1>🎉 挑战结束</h1>
+        <h1 class="score-text" id="finalScore">?</h1>
+        <p>分</p>
+        <a href="index.html" class="btn-primary">返回大厅</a>
+    </div>
 
 </div>
 
-<script src="script_engine.js?v=16.3"></script>
-
+<script src="script_engine.js?v=12.5"></script>
 <script>
+    // 1. 启动引擎 - 笔试模式
     initEngine('written');
+
+    // 2. 📋 完整学生名单 (27人)
     const STUDENTS = [
         "1. 张宇豪", "2. 张佳寒", "3. 张睿渊", "4. 张羽韬", "5. 张美茹",
         "6. 张嘉钦", "7. 卢梦婷", "8. 张悦萱", "9. 张语涵", "10. 张英豪",
@@ -102,6 +101,8 @@
         "21. 张梓亦", "22. 张皓鑫", "23. 张雨欣", "24. 张如欣", "25. 张柏涵",
         "26. 张梓纯", "27. 张泽鑫"
     ];
+
+    // 3. 自动填充下拉菜单
     const sel = document.getElementById('studentSelector');
     STUDENTS.forEach(name => {
         const opt = document.createElement('option');
