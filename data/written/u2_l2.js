@@ -3,8 +3,6 @@ window.LOAD_QUIZ({
     mode: "written", 
     timeLimit: 540,
 
-    // ✅ 修改点1：在图片资源里加上了冰淇淋的图
-    // 请确保你的文件夹里有名为 img/ice_cream_10.png 的图片
     images: {
         'num_01': 'img/num_01.png',
         'num_02': 'img/num_02.png',
@@ -16,7 +14,7 @@ window.LOAD_QUIZ({
         'num_10': 'img/num_10.png',
         'park': 'img/cene_park.png',
         'great': 'img/badge_great.png',
-        'ice_cream_10': 'img/ice_cream_10.png' // 新增的图片ID
+        'ice_cream_10': 'img/ice_cream_10.png' // 你的冰淇淋主图
     },
 
     questions: [
@@ -31,21 +29,30 @@ window.LOAD_QUIZ({
             correct: 'image:num_05'
         },
         
-        // ✅ 修改点2：第2题已更新为“看图数冰淇淋”
+        // ✅ 【修改点】第2题：
+        // 1. Audio: 问 "How many? Ten."
+        // 2. Main Image: 展示10个冰淇淋
+        // 3. Options: 选数字图片 (10)
         {
             qNum: 2,
             part: 'A',
             type: 'select',
-            text: '看图回答问题：How many ice creams?',
-            imageKey: 'ice_cream_10',  // 对应上面 images 里的 key
-            audioText: 'How many ice creams?',
+            text: '听录音，选出正确的数字图片。',
+            
+            // 这里放“10个冰淇淋”的具体情景图
+            imageKey: 'ice_cream_10',  
+            
+            // 录音内容
+            audioText: 'How many ice creams? Ten ice creams.',
+            
+            // 选项变回了图片 (数字卡片)
             options: [
-                'Four ice creams', 
-                'Five ice creams', 
-                'Ten ice creams', 
-                'Two ice creams'
+                'image:num_04', 
+                'image:num_05', 
+                'image:num_10',  // 正确答案
+                'image:num_02'
             ],
-            correct: 'Ten ice creams'
+            correct: 'image:num_10'
         },
 
         {
@@ -85,16 +92,11 @@ window.LOAD_QUIZ({
             words: ['ducks', 'many', 'How', '?'], 
             correct: 'How many ducks?'
         },
+        
+        // 原第7题已删除
+
         {
-            qNum: 7,
-            part: 'B',
-            type: 'drag-sort',
-            text: '点击单词，组成句子。',
-            words: ['park.', "Let's", 'in the', 'play'],
-            correct: "Let's play in the park."
-        },
-        {
-            qNum: 8,
+            qNum: 7, 
             part: 'B',
             type: 'select',
             text: '选择 "six" 对应的图片。',
@@ -102,7 +104,7 @@ window.LOAD_QUIZ({
             correct: 'image:num_06'
         },
         {
-            qNum: 9,
+            qNum: 8, 
             part: 'B',
             type: 'select',
             text: '看图，How many ice creams? (有多少个冰淇淋？)',
@@ -111,7 +113,7 @@ window.LOAD_QUIZ({
             correct: 'four'
         },
         {
-            qNum: 10,
+            qNum: 9, 
             part: 'B',
             type: 'select',
             text: '这是哪里？选出对应的单词。',
@@ -122,20 +124,28 @@ window.LOAD_QUIZ({
 
         // ================= Part C: Writing (写作) =================
         {
-            qNum: 11,
+            qNum: 10,
             part: 'C',
             type: 'select',
             text: '朋友回答正确，你想说“那是对的”，英语怎么说？',
-            options: ['That\'s right.', 'That\'s kite.', 'Really?', 'How many?'],
-            correct: 'That\'s right.'
+            options: ['That’s right.', 'That’s kite.', 'Really?', 'How many?'],
+            correct: 'That’s right.'
+        },
+        {
+            qNum: 11,
+            part: 'C',
+            type: 'drag-sort',
+            text: '数字接龙：请按 1 到 5 的顺序排列单词。',
+            words: ['three', 'one', 'four', 'two', 'five'], 
+            correct: 'one two three four five'
         },
         {
             qNum: 12,
             part: 'C',
             type: 'drag-sort',
-            text: '数字接龙：请按 1 到 10 的顺序排列单词。',
-            words: ['three', 'ten', 'one', 'six', 'nine', 'four', 'two', 'eight', 'five', 'seven'], 
-            correct: 'one two three four five six seven eight nine ten'
+            text: '数字接龙：请按 6 到 10 的顺序排列单词。',
+            words: ['nine', 'six', 'ten', 'eight', 'seven'], 
+            correct: 'six seven eight nine ten'
         },
         {
             qNum: 13,
@@ -145,8 +155,6 @@ window.LOAD_QUIZ({
             options: ['six', 'seven', 'eight', 'nine'],
             correct: 'eight'
         },
-        
-        // ✅ 修改点3：这里顺手把 bad 改成了 fine
         {
             qNum: 14,
             part: 'C',
