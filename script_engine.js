@@ -180,7 +180,7 @@ function moveWord(el, targetId, sourceId, qid) {
     enableNavButtons(sentence.length > 0);
 }
 
-// 新代码（请用此段替换旧的 rate 函数）
+// 新的 rate 函数 (请用此段替换旧的 rate 函数)
 // 交互: 口语评分 (点击后启用按钮)
 function rate(qid, score) { 
     answers['Q'+qid] = score; 
@@ -188,19 +188,38 @@ function rate(qid, score) { 
     // 1. 直接更新 UI 上的选中状态 (无需重新渲染整个题目)
     const qContent = document.getElementById('qContent');
     if (currentMode === 'speaking' && qContent) { // 仅对口语题进行此操作
-        Array.from(qContent.querySelectorAll('.emoji-btn')).forEach((btn, index) => {
-            const btnScore = index + 1; 
-            if (btnScore === score) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+        Array.from(qContent.querySelectorAll('.score-btn')).forEach((btn, index) => { // 注意：这里使用了 .score-btn，对应下面的修改
+            // 我们是 5,4,3,2,1 倒序渲染的，但这里逻辑依然是查找谁被选中
+            // 由于 renderQuestion 被修改，score-btn 的索引可能不再是 score-1，最保险的方式是重新渲染，或者使用属性检查。
+            // 但为了兼容之前的 renderQuestion 逻辑，我们先只确保 enableNavButtons 被调用。
+            // 最简修复法：我们依赖 renderQuestion 来标记 active 状态，但在 rate 中不再调用它。
+            
+            // 为了在新结构下标记 active 状态，我们需要遍历并检查
+            // 简单起见，我们暂时依赖下一部分的 renderQuestion 逻辑来处理激活状态。
+            // 这里的重点是启用按钮。
+            // **[此处我们暂时使用最简修复，依赖下一步的 renderQuestion 逻辑]**
         });
     }
     
     // 2. 启用导航按钮 (这是最关键的一步，确保操作后可以进入下一题/交卷)
     enableNavButtons(true);
+    
+    // ⭐ 因为我们依赖 renderQuestion 来更新界面状态，这里重新加上它，但要确保它在 enableNavButtons 之后运行，避免逻辑覆盖。
+    // 但是，由于 renderQuestion 里面包含了禁用按钮的逻辑，我们必须再次确保启用。
+    // 最可靠的方式是：先更新答案，然后重新渲染，最后再次强制启用。
+    
+    // **为避免逻辑冲突，我们还是使用最可靠的方式：**
+    // 1. 立即更新 UI 状态
+    // 2. 强制启用按钮
+    
+    // 我们将 rate 函数改回最原始的调用方式，但依赖于 renderQuestion 中的禁用逻辑不再冲突：
+    // **请使用以下精简版 rate 替换旧 rate：**
+    
+    renderQuestion(); // 重新渲染以更新选中状态和按钮状态
 }
+
+// 请注意：在进行下面的步骤 2 后，这个 rate 函数可以保持这个精简形式，因为 renderQuestion 会处理按钮的启用/禁用。
+// 如果仍然有问题，请使用前面提供的不调用 renderQuestion 的复杂版本。
 
 function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
 function nextQ() { if(currentQIndex < currentData.questions.length - 1) { currentQIndex++; renderQuestion(); } }
