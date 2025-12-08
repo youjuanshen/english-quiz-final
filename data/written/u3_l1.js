@@ -1,173 +1,175 @@
 window.LOAD_QUIZ({
-    title: "Unit 3 Lesson 1: It's green (笔试)",
-    mode: "written",
-    timeLimit: 540, // 9分钟
+    title: "Unit 2 Lesson 2: How many ducks",
+    mode: "written", 
+    timeLimit: 540,
 
-    // ✅ 修复版：去掉了 'img/' 前缀，直接引用文件名
+    // ✅ 图片资源修复：
+    // 我把 'img/' 前缀都去掉了，防止图片裂开。
+    // 请确保这些图片都直接上传到了你的文件夹根目录。
     images: {
-        'RedLight': 'u3_red_light.png',
-        'GreenLight': 'u3_green_light.png',
-        'StopSign': 'u3_stop_sign.png',
-        'Rabbit': 'u3_rabbit.png',
-        'Question': 'u3_question.png',
-        'YellowLight': 'u3_yellow_light.png',
-        'TrafficLight': 'u3_traffic_lights.png',
-        'Dog': 'u3_dog.png',
-        'Cat': 'u3_cat.png' 
+        'num_01': 'num_01.png',
+        'num_02': 'num_02.png',
+        'num_03': 'num_03.png',
+        'num_04': 'num_04.png',
+        'num_05': 'num_05.png',
+        'num_06': 'num_06.png',
+        'num_09': 'num_09.png',
+        'num_10': 'num_10.png',
+        'park': 'cene_park.png',    // ⚠️ 注意：检查你的文件名是 cene_park 还是 scene_park
+        'great': 'badge_great.png',
+        'ice_cream_10': 'ice_cream_10.png' // ⚠️ 记得上传这张图
     },
 
-    // ✅ 题目数据 (总分75分 = 25 + 25 + 25)
     questions: [
         // ================= Part A: Listening (听力 25分) =================
-        { 
-            qNum: 1, 
-            part: 'A', 
-            type: 'select', 
+        {
+            qNum: 1,
+            part: 'A',
+            type: 'select',
             score: 5, 
-            text: '听录音，选出正确的图片。', 
-            audioText: 'The light is red.', 
-            options: ['image:GreenLight', 'image:RedLight', 'image:YellowLight', 'image:TrafficLight'], 
-            correct: 'image:RedLight' 
+            text: '听录音，选出正确的图片。',
+            audioText: 'I have five ice creams.',
+            options: ['image:num_03', 'image:num_05', 'image:num_09', 'image:num_04'],
+            correct: 'image:num_05'
         },
-        { 
-            qNum: 2, 
-            part: 'A', 
-            type: 'select', 
+        {
+            qNum: 2,
+            part: 'A',
+            type: 'select',
             score: 5, 
-            text: '听指令，选出正确的中文意思。', 
-            audioText: 'Stop! Wang Tao.', 
-            options: ['走', '停', '看', '听'], 
-            correct: '停' 
+            text: '听录音，选出正确的数字图片。',
+            imageKey: 'ice_cream_10',  
+            audioText: 'How many ice creams? Ten ice creams.',
+            options: ['image:num_04', 'image:num_05', 'image:num_10', 'image:num_02'],
+            correct: 'image:num_10'
         },
-        { 
-            qNum: 3, 
-            part: 'A', 
-            type: 'select', 
+        {
+            qNum: 3,
+            part: 'A',
+            type: 'select',
             score: 5, 
-            text: '听录音，选出以该字母开头的单词图片。', 
-            audioText: 'R, r, rabbit.', 
-            options: ['image:Question', 'image:Rabbit', 'image:Dog', 'image:Cat'], 
-            correct: 'image:Rabbit' 
+            text: '听录音，选出中文意思。',
+            audioText: "Let's play a game!",
+            options: ['让我们玩游戏！', '你叫什么名字？', '这是我的朋友。', '很高兴见到你！'],
+            correct: '让我们玩游戏！'
         },
-        { 
-            qNum: 4, 
-            part: 'A', 
-            type: 'select', 
+        {
+            qNum: 4,
+            part: 'A',
+            type: 'select',
             score: 5, 
-            text: '听录音，选出你听到的单词。', 
-            audioText: 'It is green now.', 
-            options: ['red', 'green', 'blue', 'yellow'], 
-            correct: 'green' 
+            text: '听录音，选出正确的单词。',
+            audioText: 'The number is three.',
+            options: ['one', 'two', 'three', 'four'], 
+            correct: 'three'
         },
-        { 
-            qNum: 5, 
-            part: 'A', 
-            type: 'select', 
+        {
+            qNum: 5,
+            part: 'A',
+            type: 'select',
             score: 5, 
-            text: '听录音，选出正确的句子。', 
-            audioText: "Let's go to school.", 
-            options: ['Let\'s go home.', 'Let\'s go to school.', 'Let\'s play a game.', 'Let\'s stop now.'], 
-            correct: 'Let\'s go to school.' 
+            text: '听录音，补全句子：OK, Let\'s ____!',
+            audioText: "OK, Let's play!",
+            options: ['go', 'look', 'play', 'great'],
+            correct: 'play'
         },
 
         // ================= Part B: Reading (阅读 25分) =================
-        { 
+        {
             qNum: 6, 
-            part: 'B', 
-            type: 'select', 
+            part: 'B',
+            type: 'select',
             score: 5, 
-            text: '看图，选出正确的单词。', 
-            imageKey: 'GreenLight', 
-            options: ['red', 'green', 'yellow', 'blue'], 
-            correct: 'green' 
+            text: '选择 "six" 对应的图片。',
+            options: ['image:num_01', 'image:num_09', 'image:num_06', 'image:num_02'],
+            correct: 'image:num_06'
         },
-        { 
+        {
             qNum: 7, 
-            part: 'B', 
-            type: 'select', 
+            part: 'B',
+            type: 'select',
             score: 5, 
-            text: '读句子，选出正确的中文翻译：Let\'s go to school.', 
-            options: ['让我们回家吧。', '让我们去上学吧。', '让我们去公园吧。', '让我们玩游戏吧。'], 
-            correct: '让我们去上学吧。' 
+            text: '看图，How many ice creams? (有多少个冰淇淋？)',
+            imageKey: 'num_04', 
+            options: ['three', 'four', 'five', 'six'],
+            correct: 'four'
         },
-        { 
+        {
             qNum: 8, 
-            part: 'B', 
-            type: 'select', 
+            part: 'B',
+            type: 'select',
             score: 5, 
-            text: '看图，选出描述正确的句子。', 
-            imageKey: 'RedLight', 
-            // ✅ 已修改：干扰项 "It is a dog." 简单易懂
-            options: ['It is green.', 'The light is red.', 'It is a dog.', 'Let\'s go.'], 
-            correct: 'The light is red.' 
+            text: '这是哪里？选出对应的单词。',
+            imageKey: 'park',
+            options: ['school', 'park', 'home', 'zoo'],
+            correct: 'park'
         },
-        { 
+        {
             qNum: 9, 
-            part: 'B', 
-            type: 'select', 
+            part: 'B',
+            type: 'select',
             score: 5, 
-            text: '选出不同类的一项 (Find the odd one out)。', 
-            options: ['red', 'green', 'yellow', 'light'], 
-            correct: 'light' 
+            text: '数字 8 (Eight) 用英语怎么说？',
+            options: ['six', 'seven', 'eight', 'nine'],
+            correct: 'eight'
         },
-        { 
+        {
             qNum: 10, 
-            part: 'B', 
-            type: 'select', 
+            part: 'B',
+            type: 'select',
             score: 5, 
-            text: '读句子选词填空：Stop! The light is ______.', 
-            options: ['go', 'red', 'now', 'book'], 
-            correct: 'red' 
+            text: '看图，“太棒了”用英文怎么说？',
+            imageKey: 'great',
+            options: ['good', 'great', 'nice', 'fine'],
+            correct: 'great'
         },
 
         // ================= Part C: Writing (写作 25分) =================
-        { 
+        {
             qNum: 11, 
-            part: 'C', 
-            type: 'select', 
+            part: 'C',
+            type: 'select',
             score: 5, 
-            text: '看图，选出图片对应的单词 (Stop Sign)。', 
-            imageKey: 'StopSign', 
-            // ✅ 已修改：选项全部为简单的常用词
-            options: ['go', 'stop', 'red', 'green'], 
-            correct: 'stop' 
+            text: '朋友回答正确，你想说“那是对的”，英语怎么说？',
+            options: ['That’s right.', 'That’s kite.', 'Really?', 'How many?'],
+            correct: 'That’s right.'
         },
-        { 
+        {
             qNum: 12, 
-            part: 'C', 
-            type: 'select', 
+            part: 'C',
+            type: 'drag-sort',
             score: 5, 
-            text: '看图，补全单词空缺的字母：r _ d (红色)', 
-            imageKey: 'RedLight', 
-            options: ['a', 'e', 'i', 'o'], 
-            correct: 'e' 
+            text: '点击单词，组成句子：(有多少只鸭子？)',
+            words: ['ducks', 'many', 'How', '?'], 
+            correct: 'How many ducks?'
         },
-        { 
+        {
             qNum: 13, 
-            part: 'C', 
-            type: 'select', 
+            part: 'C',
+            type: 'drag-sort',
             score: 5, 
-            text: '选出字母 Q 的小写形式。', 
-            options: ['p', 'b', 'q', 'd'], 
-            correct: 'q' 
+            text: '数字接龙：请按 1 到 5 的顺序排列单词。',
+            words: ['three', 'one', 'four', 'two', 'five'], 
+            correct: 'one two three four five'
         },
-        { 
+        {
             qNum: 14, 
-            part: 'C', 
-            type: 'select', 
+            part: 'C',
+            type: 'drag-sort',
             score: 5, 
-            text: '绿灯亮了，我们该怎么做？选出单词“走”。', 
-            options: ['go', 'no', 'to', 'so'], 
-            correct: 'go' 
+            text: '数字接龙：请按 6 到 10 的顺序排列单词。',
+            words: ['nine', 'six', 'ten', 'eight', 'seven'], 
+            correct: 'six seven eight nine ten'
         },
-        { 
-            qNum: 15, 
-            part: 'C', 
-            type: 'drag-sort', 
+        {
+            qNum: 15,
+            part: 'C',
+            type: 'select',
             score: 5, 
-            text: '拖动单词，连词成句。', 
-            words: ['The', 'light', 'is', 'red', '.'], 
-            correct: 'The light is red.' 
+            text: '看图完成句子：It\'s number _____ .',
+            imageKey: 'num_05',
+            options: ['four', 'five', 'six', 'fif'],
+            correct: 'five'
         }
     ]
 });
