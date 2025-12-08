@@ -1,10 +1,10 @@
 window.LOAD_QUIZ({
     title: "Unit 2 Lesson 2: How many ducks",
-    mode: "written", // 笔试模式 (包含听力+阅读+写作)
-    timeLimit: 540,  // 限时 9 分钟
+    mode: "written", 
+    timeLimit: 540,
 
-    // ✅ 图片资源映射 (Key : 文件路径)
-    // 请确保您的 img 文件夹里有这些图片
+    // ✅ 修改点1：在图片资源里加上了冰淇淋的图
+    // 请确保你的文件夹里有名为 img/ice_cream_10.png 的图片
     images: {
         'num_01': 'img/num_01.png',
         'num_02': 'img/num_02.png',
@@ -15,7 +15,8 @@ window.LOAD_QUIZ({
         'num_09': 'img/num_09.png',
         'num_10': 'img/num_10.png',
         'park': 'img/cene_park.png',
-        'great': 'img/badge_great.png'
+        'great': 'img/badge_great.png',
+        'ice_cream_10': 'img/ice_cream_10.png' // 新增的图片ID
     },
 
     questions: [
@@ -26,19 +27,27 @@ window.LOAD_QUIZ({
             type: 'select',
             text: '听录音，选出正确的图片。',
             audioText: 'I have five ice creams.',
-            // 使用 image:前缀来引用上面的 images
             options: ['image:num_03', 'image:num_05', 'image:num_09', 'image:num_04'],
             correct: 'image:num_05'
         },
+        
+        // ✅ 修改点2：第2题已更新为“看图数冰淇淋”
         {
             qNum: 2,
             part: 'A',
             type: 'select',
-            text: '听录音，选出正确的图片。',
-            audioText: 'Count the number to ten.',
-            options: ['image:num_04', 'image:num_05', 'image:num_10', 'image:num_02'],
-            correct: 'image:num_10'
+            text: '看图回答问题：How many ice creams?',
+            imageKey: 'ice_cream_10',  // 对应上面 images 里的 key
+            audioText: 'How many ice creams?',
+            options: [
+                'Four ice creams', 
+                'Five ice creams', 
+                'Ten ice creams', 
+                'Two ice creams'
+            ],
+            correct: 'Ten ice creams'
         },
+
         {
             qNum: 3,
             part: 'A',
@@ -51,17 +60,19 @@ window.LOAD_QUIZ({
         {
             qNum: 4,
             part: 'A',
-            type: 'fill',
-            text: '听录音，写出单词。',
+            type: 'select',
+            text: '听录音，选出正确的单词。',
             audioText: 'The number is three.',
+            options: ['one', 'two', 'three', 'four'], 
             correct: 'three'
         },
         {
             qNum: 5,
             part: 'A',
-            type: 'fill',
-            text: '听录音，写出单词。',
+            type: 'select',
+            text: '听录音，补全句子：OK, Let\'s ____!',
             audioText: "OK, Let's play!",
+            options: ['go', 'look', 'play', 'great'],
             correct: 'play'
         },
 
@@ -70,9 +81,9 @@ window.LOAD_QUIZ({
             qNum: 6,
             part: 'B',
             type: 'drag-sort',
-            text: '点击单词，组成句子。',
-            words: ['apple', 'is', 'This', 'an', '.'],
-            correct: 'This is an apple.'
+            text: '点击单词，组成句子：(有多少只鸭子？)',
+            words: ['ducks', 'many', 'How', '?'], 
+            correct: 'How many ducks?'
         },
         {
             qNum: 7,
@@ -93,9 +104,10 @@ window.LOAD_QUIZ({
         {
             qNum: 9,
             part: 'B',
-            type: 'fill',
-            text: '看图，用英文回答数量：How many ice creams?',
-            imageKey: 'num_04', // 引用上面的 num_04 图片
+            type: 'select',
+            text: '看图，How many ice creams? (有多少个冰淇淋？)',
+            imageKey: 'num_04', 
+            options: ['three', 'four', 'five', 'six'],
             correct: 'four'
         },
         {
@@ -113,39 +125,44 @@ window.LOAD_QUIZ({
             qNum: 11,
             part: 'C',
             type: 'select',
-            text: '选择数字 7 的拼写。',
-            options: ['seven', 'sevan', 'sewen', 'seve'],
-            correct: 'seven'
+            text: '朋友回答正确，你想说“那是对的”，英语怎么说？',
+            options: ['That\'s right.', 'That\'s kite.', 'Really?', 'How many?'],
+            correct: 'That\'s right.'
         },
         {
             qNum: 12,
             part: 'C',
             type: 'drag-sort',
-            text: '点击单词，完成句子：I can ___ the ___ from one to ten.',
-            words: ['say', 'numbers', 'play', 'go'],
-            correct: 'I can say the numbers from one to ten.' // 注意：这里是完整句子，引擎会自动判断
+            text: '数字接龙：请按 1 到 10 的顺序排列单词。',
+            words: ['three', 'ten', 'one', 'six', 'nine', 'four', 'two', 'eight', 'five', 'seven'], 
+            correct: 'one two three four five six seven eight nine ten'
         },
         {
             qNum: 13,
             part: 'C',
-            type: 'fill',
-            text: '写出数字 8 的英文。',
+            type: 'select',
+            text: '数字 8 (Eight) 用英语怎么说？',
+            options: ['six', 'seven', 'eight', 'nine'],
             correct: 'eight'
         },
+        
+        // ✅ 修改点3：这里顺手把 bad 改成了 fine
         {
             qNum: 14,
             part: 'C',
-            type: 'fill',
+            type: 'select',
             text: '看图，“太棒了”用英文怎么说？',
             imageKey: 'great',
+            options: ['good', 'great', 'nice', 'fine'],
             correct: 'great'
         },
         {
             qNum: 15,
             part: 'C',
-            type: 'fill',
+            type: 'select',
             text: '看图完成句子：It\'s number _____ .',
             imageKey: 'num_05',
+            options: ['four', 'five', 'six', 'fif'],
             correct: 'five'
         }
     ]
