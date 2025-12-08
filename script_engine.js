@@ -2,6 +2,15 @@
 // ⚠️ 请确认这里是您最新的、可用的 Google Script 链接
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-A33EvU8ZlvfYwwguSEFyu8QdVfcNymYnMC-XlCDnA6h6_7UcMGhtstIts2ml5fml/exec";
 
+// ✅ 1. 新增：口语评分标准描述
+const SPEAKING_RUBRIC = [
+    "[1分] 无法作答",
+    "[2分] 表达困难，依赖提示",
+    "[3分] 需提示才能完成",
+    "[4分] 基本清晰，偶有提示",
+    "[5分] 流畅自然，无需提示"
+];
+
 let currentData = null;
 let currentMode = '';
 let currentQIndex = 0;
@@ -25,11 +34,9 @@ window.LOAD_QUIZ = function(data) {
 };
 
 function loadPaper(path) {
-    // 这里原来的那行删掉了
     toggleDisplay('loadingBox', true);
     
     const script = document.createElement('script');
-    // ... 后面的保持不变;
     let folder = currentMode === 'speaking' ? 'data/speaking/' : 'data/written/';
     if (path.indexOf('/') === -1) { script.src = folder + path; } else { script.src = path; }
     script.onerror = () => { alert("❌ 文件未找到: " + script.src); location.reload(); };
@@ -74,8 +81,7 @@ function renderQuestion() {
     }
 
     // 🔥 3. 核心逻辑：检查当前题是否已答，控制按钮禁用 🔥
-    const hasAnswered = answers['Q' + currentQid] && answers['Q' + currentQid].trim() !== '';
-    // 如果是最后一题，控制交卷按钮；否则控制下一题按钮
+    const hasAnswered = answers['Q' + currentQid] && answers['Q' + currentQid].toString().trim() !== '';
     const targetBtn = (currentQIndex === total - 1) ? btnSubmit : btnNext;
     targetBtn.disabled = !hasAnswered; // 没答就禁用
 
@@ -110,43 +116,55 @@ function renderQuestion() {
             html += `</div>`;
         } else if (q.type === 'drag-sort') {
             html += `<div style="margin:10px 0; color:#666; font-size:14px;">(点击单词，把它们移到上方横线处)</div>`;
-            // 给目标区域加个特定ID样式
             html += `<div class="drag-area" id="target-container" id="target-${q.qNum}"></div>`;
             html += `<div class="drag-area" id="source-${q.qNum}">`;
             
-            // 获取当前已选的单词列表
             let currentSentence = answers['Q'+q.qNum] || "";
             let chosenWords = currentSentence ? currentSentence.split(' ') : [];
-            // 计算剩下在源区域的单词
             let remainingWords = [...q.words];
             chosenWords.forEach(word => {
                  let idx = remainingWords.indexOf(word);
                  if(idx > -1) remainingWords.splice(idx, 1);
             });
 
-            // 渲染已选的 (在上方) - 需要用 JS 动态插入到 target 容器，这里简化处理，实际交互靠 moveWord
-            // 为了简化逻辑和保证必答检查正确，这里初始化时只渲染源区域，依靠用户的点击来填充目标区域
             q.words.forEach(w => {
                  html += `<span class="word-chip" onclick="moveWord(this, 'target-${q.qNum}', 'source-${q.qNum}', '${q.qNum}')">${w}</span>`;
             });
             html += `</div>`;
         }
     } else {
+        // ✅ 2. 这里的代码被完全重写，以显示分数和描述，而不是 Emoji
         html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
-        html += `<div class="emoji-row">`;
-        [1,2,3,4,5].forEach(score => {
+        
+        // 显示顶部评分标准 (如果有的话)
+        if (currentData.rubric) {
+            html += `<pre class="rubric-display">${currentData.rubric}</pre>`;
+        }
+
+        html += `<div class="score-row">`;
+        [5, 4, 3, 2, 1].forEach(score => { // 倒序排列
              const active = answers['Q'+q.qNum] === score ? 'active' : '';
-             html += `<span class="emoji-btn ${active}" onclick="rate('${q.qNum}', ${score})">${['😶','🙂','🤔','😃','🤩'][score-1]}</span>`;
+             // 获取对应分数的描述，防止 rubric 未定义报错
+             const description = (typeof SPEAKING_RUBRIC !== 'undefined') ? SPEAKING_RUBRIC[score - 1] : "";
+             
+             // 生成点击区域
+             html += `
+                <div class="score-item" onclick="rate('${q.qNum}', ${score})">
+                    <button class="score-btn ${active}">
+                        ${score} 分
+                    </button>
+                    <span class="score-desc">${description}</span>
+                </div>
+             `;
         });
         html += `</div>`;
     }
     document.getElementById('qContent').innerHTML = html;
     
-    // 拖拽题特殊处理：如果已有答案，需要恢复视觉状态 (简单版：清空答案让用户重排，确保交互顺畅)
     if(currentMode === 'written' && q.type === 'drag-sort' && hasAnswered) {
-        answers['Q'+q.qNum] = ""; // 重置答案
-        enableNavButtons(false);  // 禁用按钮
-        renderQuestion();         // 重新渲染
+        answers['Q'+q.qNum] = ""; 
+        enableNavButtons(false);  
+        renderQuestion();         
         return;
     }
 }
@@ -161,13 +179,12 @@ function enableNavButtons(enable) {
 // 交互: 选择题 (点击后启用按钮)
 function choose(qid, val) { 
     answers['Q'+qid] = val; 
-    renderQuestion(); // 重新渲染以更新选中状态
-    enableNavButtons(true); // 启用按钮
+    renderQuestion(); 
+    enableNavButtons(true); 
 }
 
 // 交互: 拖拽题 (点击移动，有内容就启用按钮)
 function moveWord(el, targetId, sourceId, qid) {
-    // 注意：renderQuestion 里 ID 写错了，这里修正
     const target = document.querySelector(`#qContent .drag-area[id^="target-"]`);
     const source = document.getElementById(sourceId);
     
@@ -176,50 +193,32 @@ function moveWord(el, targetId, sourceId, qid) {
     const sentence = Array.from(target.children).map(span => span.innerText).join(' ');
     answers['Q'+qid] = sentence;
     
-    // 只要目标区域有词，就启用按钮；否则禁用
     enableNavButtons(sentence.length > 0);
 }
 
-// 新的 rate 函数 (请用此段替换旧的 rate 函数)
-// 交互: 口语评分 (点击后启用按钮)
-function rate(qid, score) { 
-    answers['Q'+qid] = score; 
-    
-    // 1. 直接更新 UI 上的选中状态 (无需重新渲染整个题目)
-    const qContent = document.getElementById('qContent');
-    if (currentMode === 'speaking' && qContent) { // 仅对口语题进行此操作
-        Array.from(qContent.querySelectorAll('.score-btn')).forEach((btn, index) => { // 注意：这里使用了 .score-btn，对应下面的修改
-            // 我们是 5,4,3,2,1 倒序渲染的，但这里逻辑依然是查找谁被选中
-            // 由于 renderQuestion 被修改，score-btn 的索引可能不再是 score-1，最保险的方式是重新渲染，或者使用属性检查。
-            // 但为了兼容之前的 renderQuestion 逻辑，我们先只确保 enableNavButtons 被调用。
-            // 最简修复法：我们依赖 renderQuestion 来标记 active 状态，但在 rate 中不再调用它。
-            
-            // 为了在新结构下标记 active 状态，我们需要遍历并检查
-            // 简单起见，我们暂时依赖下一部分的 renderQuestion 逻辑来处理激活状态。
-            // 这里的重点是启用按钮。
-            // **[此处我们暂时使用最简修复，依赖下一步的 renderQuestion 逻辑]**
-        });
-    }
-    
-    // 2. 启用导航按钮 (这是最关键的一步，确保操作后可以进入下一题/交卷)
-    enableNavButtons(true);
+// ✅ 3. 修复后的 rate 函数：直接操作 DOM 并确保按钮启用
+function rate(qid, score) { 
+    answers['Q'+qid] = score; 
     
-    // ⭐ 因为我们依赖 renderQuestion 来更新界面状态，这里重新加上它，但要确保它在 enableNavButtons 之后运行，避免逻辑覆盖。
-    // 但是，由于 renderQuestion 里面包含了禁用按钮的逻辑，我们必须再次确保启用。
-    // 最可靠的方式是：先更新答案，然后重新渲染，最后再次强制启用。
+    // 直接更新 UI 上的选中状态 (查找 .score-btn)
+    const qContent = document.getElementById('qContent');
+    if (currentMode === 'speaking' && qContent) {
+        Array.from(qContent.querySelectorAll('.score-btn')).forEach((btn) => {
+             // 提取数字，例如 "5 分" -> 5
+             const btnScoreText = btn.innerText.replace(/[^\d]/g, ''); 
+             const btnScore = parseInt(btnScoreText); 
+             
+             if (btnScore === score) {
+                 btn.classList.add('active');
+             } else {
+                 btn.classList.remove('active');
+             }
+        });
+    }
     
-    // **为避免逻辑冲突，我们还是使用最可靠的方式：**
-    // 1. 立即更新 UI 状态
-    // 2. 强制启用按钮
-    
-    // 我们将 rate 函数改回最原始的调用方式，但依赖于 renderQuestion 中的禁用逻辑不再冲突：
-    // **请使用以下精简版 rate 替换旧 rate：**
-    
-    renderQuestion(); // 重新渲染以更新选中状态和按钮状态
+    // 强制启用导航按钮
+    enableNavButtons(true);
 }
-
-// 请注意：在进行下面的步骤 2 后，这个 rate 函数可以保持这个精简形式，因为 renderQuestion 会处理按钮的启用/禁用。
-// 如果仍然有问题，请使用前面提供的不调用 renderQuestion 的复杂版本。
 
 function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
 function nextQ() { if(currentQIndex < currentData.questions.length - 1) { currentQIndex++; renderQuestion(); } }
@@ -228,7 +227,7 @@ function speak(text) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = 0.9;     
+        u.lang = 'en-US'; u.rate = 0.9;      
         window.speechSynthesis.speak(u);
     }
 }
@@ -258,7 +257,6 @@ function submit() {
     clearInterval(timerInterval);
     toggleDisplay('quizInterface', false);
     
-    // 🔥 1. 显示可爱的上传界面 🔥
     const submittingBox = document.getElementById('submittingBox');
     submittingBox.innerHTML = `
         <div class="cute-loader">🚀</div>
@@ -270,7 +268,6 @@ function submit() {
     let totalScore = 0;
     let scoreL=0, scoreR=0, scoreW=0;
 
-    // 计算分数逻辑 (不变)
     if (currentMode === 'speaking') {
         Object.values(answers).forEach(v => totalScore += parseInt(v)||0);
     } else {
@@ -291,13 +288,9 @@ function submit() {
         });
     }
 
-    // 🔥 2. 准备详细结算报告数据 🔥
-    // 计算满分和百分比
     let maxScore = currentData.questions.length * 5;
     let percentNum = Math.round((totalScore / maxScore) * 100);
-    let percentStr = percentNum + "%";
     
-    // 根据百分比生成鼓励语
     let feedback = "";
     if (percentNum >= 95) feedback = "🌟 哇！你是超级英语小达人！太棒了！";
     else if (percentNum >= 85) feedback = "👏 真不错！成绩非常优秀，继续保持！";
@@ -317,7 +310,6 @@ function submit() {
     
     console.log("Submitting:", payload);
     
-    // 发送请求 (无论成功失败都显示详细报告)
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST', mode: 'no-cors',
         headers: {'Content-Type': 'application/json'},
@@ -325,7 +317,6 @@ function submit() {
     }).finally(() => {
         toggleDisplay('submittingBox', false);
         
-        // 🔥 3. 渲染详细结算界面 🔥
         const resultBox = document.getElementById('resultBox');
         resultBox.innerHTML = `
             <h1>🎉 挑战圆满结束！</h1>
