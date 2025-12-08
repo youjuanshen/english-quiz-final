@@ -1,8 +1,8 @@
-// ================= 全局配置 (V13.0 交互升级版) =================
+// ================= 全局配置 (V13.1 无参考版) =================
 // ⚠️ 请确认这里是您最新的、可用的 Google Script 链接
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-A33EvU8ZlvfYwwguSEFyu8QdVfcNymYnMC-XlCDnA6h6_7UcMGhtstIts2ml5fml/exec";
 
-// ✅ 1. 新增：口语评分标准描述
+// ✅ 口语评分按钮旁边的文字描述
 const SPEAKING_RUBRIC = [
     "[1分] 无法作答",
     "[2分] 表达困难，依赖提示",
@@ -20,7 +20,7 @@ let timeLeft = 0;
 
 function initEngine(mode) {
     currentMode = mode;
-    console.log("Engine V13.0 Loaded: " + mode);
+    console.log("Engine V13.1 Loaded: Reference Removed"); // 控制台会打印这行字，证明新代码加载成功
 }
 
 window.LOAD_QUIZ = function(data) {
@@ -39,6 +39,8 @@ function loadPaper(path) {
     const script = document.createElement('script');
     let folder = currentMode === 'speaking' ? 'data/speaking/' : 'data/written/';
     if (path.indexOf('/') === -1) { script.src = folder + path; } else { script.src = path; }
+    // 添加时间戳防止缓存
+    script.src += "?t=" + new Date().getTime(); 
     script.onerror = () => { alert("❌ 文件未找到: " + script.src); location.reload(); };
     document.body.appendChild(script);
 }
@@ -55,7 +57,7 @@ function startExam() {
     startTimer();
 }
 
-// ================= ⭐ 核心渲染逻辑 (含必答题限制) ⭐ =================
+// ================= ⭐ 核心渲染逻辑 ⭐ =================
 function renderQuestion() {
     const q = currentData.questions[currentQIndex];
     const total = currentData.questions.length;
@@ -80,12 +82,12 @@ function renderQuestion() {
         toggleDisplay('btnSubmit', false);
     }
 
-    // 🔥 3. 核心逻辑：检查当前题是否已答，控制按钮禁用 🔥
+    // 3. 检查当前题是否已答
     const hasAnswered = answers['Q' + currentQid] && answers['Q' + currentQid].toString().trim() !== '';
     const targetBtn = (currentQIndex === total - 1) ? btnSubmit : btnNext;
-    targetBtn.disabled = !hasAnswered; // 没答就禁用
+    targetBtn.disabled = !hasAnswered; 
 
-    // 4. 生成题目 HTML
+    // 4. 生成题目文本和媒体
     let html = '';
     if (q.part) html += `<div style="font-size:12px; color:#999; font-weight:bold; text-transform:uppercase; margin-bottom:5px;">Part ${q.part}</div>`;
     html += `<h3 class="q-text">${q.qNum}. ${q.text}</h3>`;
@@ -98,8 +100,9 @@ function renderQuestion() {
     if (q.imageUri) html += `<img src="img/${q.imageUri}" style="max-width:100%; border-radius:15px; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
     else if (q.imageKey && currentData.images) html += `<img src="${currentData.images[q.imageKey]}" style="max-width:100%; border-radius:15px; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
 
-    // 5. 生成选项 HTML
+    // 5. 生成选项/评分区域
     if (currentMode === 'written') {
+        // ... (笔试逻辑保持不变) ...
         if (q.type === 'select' || !q.type) { 
             html += `<div class="options-list">`;
             q.options.forEach(opt => {
@@ -133,20 +136,20 @@ function renderQuestion() {
             html += `</div>`;
         }
     } else {
-        // ✅ 2. 这里的代码被完全重写，以显示分数和描述，而不是 Emoji
-        
-        // 显示顶部评分标准 (如果有的话)
-        if (currentData.rubric) {
-            html += `<pre class="rubric-display">${currentData.rubric}</pre>`;
-        }
+        // ✅✅✅ 这里是口语部分：已彻底删除“参考” ✅✅✅
+
+        // ⚠️ 我把顶部那个黄色的“评分标准”大框也暂时屏蔽了，
+        // 因为您的按钮旁边已经有详细描述了，界面会更清爽。
+        // 如果您想要那个黄框，把下面这三行代码前的 // 去掉即可。
+        // if (currentData.rubric) {
+        //    html += `<pre class="rubric-display">${currentData.rubric}</pre>`;
+        // }
 
         html += `<div class="score-row">`;
-        [5, 4, 3, 2, 1].forEach(score => { // 倒序排列
+        [5, 4, 3, 2, 1].forEach(score => { 
              const active = answers['Q'+q.qNum] === score ? 'active' : '';
-             // 获取对应分数的描述，防止 rubric 未定义报错
              const description = (typeof SPEAKING_RUBRIC !== 'undefined') ? SPEAKING_RUBRIC[score - 1] : "";
              
-             // 生成点击区域
              html += `
                 <div class="score-item" onclick="rate('${q.qNum}', ${score})">
                     <button class="score-btn ${active}">
@@ -168,42 +171,35 @@ function renderQuestion() {
     }
 }
 
-// 🔥 辅助函数：启用/禁用导航按钮 🔥
+// 🔥 辅助函数 🔥
 function enableNavButtons(enable) {
     const total = currentData.questions.length;
     const targetBtn = (currentQIndex === total - 1) ? document.getElementById('btnSubmit') : document.getElementById('btnNext');
     if(targetBtn) targetBtn.disabled = !enable;
 }
 
-// 交互: 选择题 (点击后启用按钮)
 function choose(qid, val) { 
     answers['Q'+qid] = val; 
     renderQuestion(); 
     enableNavButtons(true); 
 }
 
-// 交互: 拖拽题 (点击移动，有内容就启用按钮)
 function moveWord(el, targetId, sourceId, qid) {
     const target = document.querySelector(`#qContent .drag-area[id^="target-"]`);
     const source = document.getElementById(sourceId);
-    
     if (el.parentElement === source) target.appendChild(el); else source.appendChild(el);
-    
     const sentence = Array.from(target.children).map(span => span.innerText).join(' ');
     answers['Q'+qid] = sentence;
-    
     enableNavButtons(sentence.length > 0);
 }
 
-// ✅ 3. 修复后的 rate 函数：直接操作 DOM 并确保按钮启用
+// ✅ 评分点击逻辑
 function rate(qid, score) { 
     answers['Q'+qid] = score; 
     
-    // 直接更新 UI 上的选中状态 (查找 .score-btn)
     const qContent = document.getElementById('qContent');
     if (currentMode === 'speaking' && qContent) {
         Array.from(qContent.querySelectorAll('.score-btn')).forEach((btn) => {
-             // 提取数字，例如 "5 分" -> 5
              const btnScoreText = btn.innerText.replace(/[^\d]/g, ''); 
              const btnScore = parseInt(btnScoreText); 
              
@@ -214,8 +210,6 @@ function rate(qid, score) {
              }
         });
     }
-    
-    // 强制启用导航按钮
     enableNavButtons(true);
 }
 
@@ -251,7 +245,7 @@ function startTimer() {
     }, 1000);
 }
 
-// ================= ⭐⭐ 提交函数 (含可爱界面和详细报告) ⭐⭐ =================
+// ================= 提交函数 =================
 function submit() {
     clearInterval(timerInterval);
     toggleDisplay('quizInterface', false);
