@@ -1,141 +1,57 @@
-/* style.css - V4.0 iPhone 完美适配版 (一屏显示) */
-
-* { box-sizing: border-box; }
-
-body {
-    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-    background-color: #e0f7fa;
-    margin: 0;
-    padding: 0; /* 去掉边距，利用全屏 */
-    color: #333;
-    height: 100vh; /* 强制占满屏幕高度 */
-    overflow: hidden; /* 禁止整体滚动 */
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    max-width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
-
-/* 通用隐藏 */
+/* style.css - V2.0 美化版 */
+body { font-family: 'Comic Sans MS', 'Ma Shan Zheng', cursive, sans-serif; background-color: #f0f8ff; padding: 20px; color: #333; }
+.container { max-width: 600px; margin: 0 auto; }
 .hidden { display: none !important; }
+.card { background: white; border-radius: 25px; padding: 30px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 4px solid #e1f5fe; transition: all 0.3s ease; }
+.text-center { text-align: center; }
+h1, h2, h3 { color: #0277bd; }
 
-/* === 1. 巨大选择框 (果冻风格) === */
-.big-select-group { margin-bottom: 15px; }
-.big-label { font-size: 18px; font-weight: bold; color: #006064; margin-bottom: 5px; display: block; }
+/* 按钮通用样式 */
+button { width: 100%; padding: 15px; border-radius: 30px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: transform 0.1s, background-color 0.3s; font-family: inherit; }
+button:active { transform: scale(0.98); }
+/* 🔴 新增：禁用状态的按钮 */
+button:disabled { background-color: #ccc !important; color: #666 !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
-select {
-    width: 100%;
-    height: 60px; /* 巨大高度 */
-    font-size: 20px;
-    font-weight: bold;
-    color: #00838f;
-    padding: 0 20px;
-    border: 3px solid #4dd0e1;
-    border-radius: 15px;
-    background-color: white;
-    /* 这是一个自定义的向下箭头图标 */
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300BCD4'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 30px;
-    appearance: none; -webkit-appearance: none;
-    box-shadow: 0 4px 0 #b2ebf2;
-}
-select:active { transform: translateY(4px); box-shadow: none; }
+.btn-primary { background: #03a9f4; color: white; box-shadow: 0 4px #0288d1; }
+.btn-success { background: #4caf50; color: white; box-shadow: 0 4px #388e3c; }
+.back-link { background: transparent; color: #666; border: 2px solid #ccc; }
 
-/* === 2. 卡片容器 (自适应高度) === */
-.card {
-    background: white;
-    border-radius: 20px;
-    padding: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border: 3px solid #fff;
-    
-    /* 关键布局：让卡片占满剩余空间 */
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* 防止溢出 */
-}
+/* 答题区 */
+.nav-bar { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
+#btnPrev, #btnNext, #btnSubmit { flex: 1; }
+#btnPrev { background: #ffe0b2; color: #e65100; box-shadow: 0 4px #ffb74d; }
+#btnNext { background: #b2ebf2; color: #0097a7; box-shadow: 0 4px #4dd0e1; }
 
-/* 主题色 */
-.student-theme .card { border-color: #ffe0b2; }
-.teacher-theme .card { border-color: #b3e5fc; }
+.option-item { padding: 15px 20px; border: 3px solid #e0e0e0; border-radius: 15px; margin-top: 12px; cursor: pointer; display:flex; align-items:center; font-size: 16px; background: #fafafa; transition: all 0.2s; }
+.option-item:hover { background: #f0f0f0; }
+.option-item.selected { background-color: #e1f5fe; border-color: #03a9f4; color: #0277bd; font-weight: bold; transform: scale(1.02); }
 
-/* === 3. 题目区域 (中间可滚动，两头固定) === */
-.header-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 10px; flex-shrink: 0; /* 不许压缩 */
-}
-.timer { font-family: monospace; font-size: 20px; background: #ffcc80; padding: 5px 10px; border-radius: 10px; color: white; }
+.progress-bar-bg { height: 12px; background: #e0e0e0; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+#progressBar { height: 100%; background: linear-gradient(90deg, #4dd0e1, #03a9f4); width: 0%; transition: width 0.5s ease-in-out; }
+.text-small { font-size: 14px; color: #777; text-align: right; margin-bottom: 5px; }
 
-#qContent {
-    flex: 1; /* 占据中间所有空间 */
-    overflow-y: auto; /* 内容多了才滚动 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* 内容少时垂直居中 */
-}
+.q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.4; }
+.audio-btn { background: #e0f2f1; color: #00695c; width: auto; padding: 10px 25px; margin-bottom: 20px; border-radius: 20px; box-shadow: 0 3px #80cbc4; display: inline-block; }
 
-/* 题目文本 */
-.q-text { font-size: 22px; line-height: 1.3; margin: 10px 0; color: #37474f; text-align: center; }
+/* 拖拽题样式 */
+.drag-area { min-height: 60px; border: 3px dashed #b2ebf2; border-radius: 15px; padding: 15px; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; background: #f9ffff; align-items: center; }
+#target-container { border-style: solid; border-color: #4dd0e1; background: #e0f7fa; }
+.word-chip { background: white; padding: 10px 20px; border-radius: 25px; border: 2px solid #03a9f4; cursor: pointer; font-weight: bold; color: #0277bd; box-shadow: 0 3px #81d4fa; transition: all 0.2s; }
+.word-chip:hover { transform: translateY(-2px); box-shadow: 0 5px #81d4fa; }
 
-/* 图片自适应 (防止把屏幕撑爆) */
-img { 
-    max-height: 25vh; /* 图片最高占屏幕的 1/4 */
-    width: auto; 
-    max-width: 100%;
-    margin: 0 auto 10px auto; 
-    display: block; 
-    border-radius: 10px;
-}
+/* 口语评分 Emoji */
+.emoji-row { display: flex; justify-content: space-around; font-size: 35px; margin-top: 25px; padding: 10px; background: #fff3e0; border-radius: 20px; }
+.emoji-btn { cursor: pointer; transition: transform 0.2s; opacity: 0.6; filter: grayscale(0.8); }
+.emoji-btn:hover { transform: scale(1.2); opacity: 1; filter: grayscale(0); }
+.emoji-btn.active { transform: scale(1.3); opacity: 1; filter: grayscale(0); text-shadow: 0 0 15px #ffb74d; }
 
-/* === 4. 选项按钮 (更紧凑) === */
-.options-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-.option-item {
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 18px;
-    background: #fafafa;
-    text-align: center;
-    transition: all 0.1s;
-}
-.option-item.selected { background-color: #e1f5fe; border-color: #03a9f4; color: #0277bd; font-weight: bold; }
-.option-item:active { transform: scale(0.98); background: #f5f5f5; }
+/* 🔴 新增：可爱的上传加载动画 */
+.cute-loader { font-size: 50px; animation: bounce 1s infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+.loading-text { font-size: 18px; color: #0288d1; margin-top: 15px; font-weight: bold; }
 
-/* === 5. 底部导航栏 (固定在底部) === */
-.nav-bar {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0; /* 不许压缩 */
-}
-button {
-    flex: 1;
-    padding: 15px;
-    border: none;
-    border-radius: 15px;
-    font-size: 20px;
-    font-weight: 900;
-    color: white;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-}
-button:active { transform: translateY(4px); box-shadow: none; }
-#btnPrev { background: #cfd8dc; color: #546e7a; }
-#btnNext { background: #4dd0e1; }
-#btnSubmit { background: #66bb6a; }
-.btn-primary { background: #ff9800; width: 100%; }
-
-/* 拖拽区域 */
-.drag-area { min-height: 50px; border: 2px dashed #b2ebf2; border-radius: 10px; padding: 5px; display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
-.word-chip { padding: 8px 15px; font-size: 18px; background: white; border: 2px solid #4dd0e1; border-radius: 20px; }
-
-/* 听力按钮 */
-.audio-btn { width: 100%; background: #e0f2f1; color: #00695c; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; text-align: center; }
+/* 🔴 新增：丰富的结算界面 */
+.score-summary { background: #e0f7fa; padding: 30px; border-radius: 25px; margin: 20px 0; }
+.big-score { font-size: 60px; color: #0277bd; font-weight: 900; line-height: 1; }
+.total-score { font-size: 24px; color: #81d4fa; }
+.feedback-box { margin-top: 20px; font-size: 22px; font-weight: bold; color: #e65100; background: #fff3e0; padding: 15px; border-radius: 15px; border: 3px solid #ffe0b2; }
