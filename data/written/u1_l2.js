@@ -53,7 +53,7 @@ window.LOAD_QUIZ({
             text: '听录音，判断图片是 "T" (对) 还是 "F" (错)。',
             // ✅ 修复：改回 imageUri 且使用完整文件名
             imageUri: 'u1_boy.png', 
-            audioText: 'This is my friend.',
+            audioText: 'This is a boy.',
             options: ['T', 'F'],
             correct: 'T'
         },
