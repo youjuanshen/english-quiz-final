@@ -133,9 +133,36 @@ function renderQuestion() {
             html += `</div>`;
         }
     } else {
-        // ✅ 2. 这里的代码被完全重写，以显示分数和描述，而不是 Emoji
-        html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
+        } else {
+        // ❌ 删除掉原来的 "显示参考答案" 这一行
+        // html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
         
+        // ✅ 只保留下面的部分
+        
+        // 1. 显示顶部评分标准 (如果有的话)
+        if (currentData.rubric) {
+            html += `<pre class="rubric-display">${currentData.rubric}</pre>`;
+        }
+
+        // 2. 渲染分数按钮行
+        html += `<div class="score-row">`;
+        [5, 4, 3, 2, 1].forEach(score => { // 倒序排列
+             const active = answers['Q'+q.qNum] === score ? 'active' : '';
+             // 获取对应分数的描述，防止 rubric 未定义报错
+             const description = (typeof SPEAKING_RUBRIC !== 'undefined') ? SPEAKING_RUBRIC[score - 1] : "";
+             
+             // 生成点击区域
+             html += `
+                <div class="score-item" onclick="rate('${q.qNum}', ${score})">
+                    <button class="score-btn ${active}">
+                        ${score} 分
+                    </button>
+                    <span class="score-desc">${description}</span>
+                </div>
+             `;
+        });
+        html += `</div>`;
+    } 
         // 显示顶部评分标准 (如果有的话)
         if (currentData.rubric) {
             html += `<pre class="rubric-display">${currentData.rubric}</pre>`;
