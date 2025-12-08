@@ -7,6 +7,20 @@ window.LOAD_QUIZ({
     title: "Unit 3 Lesson 1: It's green (笔试)",
     timeLimit: 540, // 9分钟
 
+    // ✅ 修复核心：去掉 'img/' 前缀！
+    // 系统会自动去 img 文件夹找，我们只提供文件名即可。
+    images: {
+        'RedLight': 'u3_red_light.png',
+        'GreenLight': 'u3_green_light.png',
+        'StopSign': 'u3_stop_sign.png',
+        'Rabbit': 'u3_rabbit.png',
+        'Question': 'u3_question.png',
+        'YellowLight': 'u3_yellow_light.png',
+        'TrafficLight': 'u3_traffic_lights.png',
+        'Dog': 'u3_dog.png',
+        'Cat': 'u3_cat.png' 
+    },
+
     questions: [
         // ===========================
         // Part A: Listening
@@ -18,7 +32,7 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出正确的图片。<br><span style="font-size:14px;color:#666">(Listen and choose the picture)</span>', 
             audioText: 'The light is red.', 
-            // ⚠️ 注意：这里沿用你U1的写法，引用图片ID
+            // 这里引用上面的 images key
             options: ['image:GreenLight', 'image:RedLight', 'image:YellowLight', 'image:TrafficLight'], 
             correct: 'image:RedLight' 
         },
@@ -72,7 +86,7 @@ window.LOAD_QUIZ({
             type: 'select', 
             score: 5,
             text: '看图，选出正确的单词。<br><span style="font-size:14px;color:#666">(Look and choose)</span>', 
-            // ⚠️ 确保你已定义 images 映射，或者直接写文件名 'img/u3_green_light.png'
+            // ✅ 这里直接写文件名，不要加 img/
             imageUri: 'u3_green_light.png', 
             options: ['A. red', 'B. green', 'C. yellow', 'D. blue'], 
             correct: 'B. green' 
