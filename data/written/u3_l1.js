@@ -3,17 +3,17 @@ window.LOAD_QUIZ({
     mode: "written",
     timeLimit: 540, // 9分钟
 
-    // ✅ 图片资源
+    // ✅ 修复版：去掉了 'img/' 前缀，直接引用文件名
     images: {
-        'RedLight': 'img/u3_red_light.png',
-        'GreenLight': 'img/u3_green_light.png',
-        'StopSign': 'img/u3_stop_sign.png',
-        'Rabbit': 'img/u3_rabbit.png',
-        'Question': 'img/u3_question.png',
-        'YellowLight': 'img/u3_yellow_light.png',
-        'TrafficLight': 'img/u3_traffic_lights.png',
-        'Dog': 'img/u3_dog.png',
-        'Cat': 'img/u3_cat.png'
+        'RedLight': 'u3_red_light.png',
+        'GreenLight': 'u3_green_light.png',
+        'StopSign': 'u3_stop_sign.png',
+        'Rabbit': 'u3_rabbit.png',
+        'Question': 'u3_question.png',
+        'YellowLight': 'u3_yellow_light.png',
+        'TrafficLight': 'u3_traffic_lights.png',
+        'Dog': 'u3_dog.png',
+        'Cat': 'u3_cat.png' 
     },
 
     // ✅ 题目数据 (总分75分 = 25 + 25 + 25)
