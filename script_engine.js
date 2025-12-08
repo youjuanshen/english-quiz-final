@@ -134,7 +134,6 @@ function renderQuestion() {
         }
     } else {
         // ✅ 2. 这里的代码被完全重写，以显示分数和描述，而不是 Emoji
-        html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
         
         // 显示顶部评分标准 (如果有的话)
         if (currentData.rubric) {
