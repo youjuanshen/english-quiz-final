@@ -1,6 +1,6 @@
-// ================= 全局配置 (V12.0 完美适配版) =================
-// ⚠️ 确保这里是您 *能够使用* 的那个 Web App URL
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxc8c4prsZZLY9vp-te4gH5twQNO1A8Ek3yROTNZeNs-7YhL60UojvMsQoceJUZ7LUP/exec";
+// ================= 全局配置 (V12.1 已更新链接) =================
+// ⚠️ 这里已经替换成了您刚刚发给我的新地址
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6eQCiusmAdAOB0CQXZbtLTKejeZ4QA_o5RMJXQIbnleKTQTxkTCt3b-WBoVsRBIzP/exec";
 
 let currentData = null;
 let currentMode = '';
@@ -11,7 +11,7 @@ let timeLeft = 0;
 
 function initEngine(mode) {
     currentMode = mode;
-    console.log("Engine V12 Loaded: " + mode);
+    console.log("Engine V12.1 Loaded: " + mode);
 }
 
 window.LOAD_QUIZ = function(data) {
@@ -46,12 +46,11 @@ function startExam() {
     startTimer();
 }
 
-// ================= ⭐ 核心渲染逻辑 (支持拖拽) =================
+// ================= ⭐ 核心渲染逻辑 =================
 function renderQuestion() {
     const q = currentData.questions[currentQIndex];
     const total = currentData.questions.length;
     
-    // 进度与翻页
     document.getElementById('progressText').innerText = `Question ${currentQIndex + 1} / ${total}`;
     document.getElementById('progressBar').style.width = `${((currentQIndex + 1) / total) * 100}%`;
     document.getElementById('btnPrev').disabled = (currentQIndex === 0);
@@ -68,8 +67,6 @@ function renderQuestion() {
 
     let html = '';
     if (q.part) html += `<div style="font-size:12px; color:#999; font-weight:bold; text-transform:uppercase; margin-bottom:5px;">Part ${q.part}</div>`;
-    
-    // 🔴 序号逻辑：引擎自动加序号
     html += `<h3 class="q-text">${q.qNum}. ${q.text}</h3>`;
 
     if (q.audioText) {
@@ -80,10 +77,7 @@ function renderQuestion() {
     if (q.imageUri) html += `<img src="img/${q.imageUri}" style="max-width:100%; border-radius:10px; margin-bottom:10px;">`;
     else if (q.imageKey && currentData.images) html += `<img src="${currentData.images[q.imageKey]}" style="max-width:100%; border-radius:10px; margin-bottom:10px;">`;
 
-    // ========== 选项渲染区 ==========
     if (currentMode === 'written') {
-        
-        // 🔹 模式 1: 选择题 (Select)
         if (q.type === 'select' || !q.type) { 
             html += `<div class="options-list">`;
             q.options.forEach(opt => {
@@ -98,29 +92,22 @@ function renderQuestion() {
                 html += `<div class="option-item ${isSelected}" onclick="choose('${q.qNum}', '${val}')">${displayContent}</div>`;
             });
             html += `</div>`;
-        } 
-        
-        // 🔹 模式 2: 拖拽题 (Drag-Sort) - 🔥 新增支持 🔥
-        else if (q.type === 'drag-sort') {
+        } else if (q.type === 'drag-sort') {
             html += `<div style="margin:10px 0; color:#666; font-size:14px;">(点击单词，把它们移到上方横线处)</div>`;
-            
-            // 目标区域 (放句子的)
-            html += `<div id="target-${q.qNum}" style="min-height:50px; border-bottom:2px solid #fb8c00; margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; padding:5px;"></div>`;
-            
-            // 源区域 (放单词的)
-            html += `<div id="source-${q.qNum}" style="display:flex; gap:10px; flex-wrap:wrap;">`;
-            
-            // 单词逻辑
-            q.words.forEach(w => {
-                html += `<span class="word-chip" 
-                    style="background:#e0f7fa; padding:8px 15px; border-radius:20px; border:1px solid #4dd0e1; cursor:pointer;"
-                    onclick="moveWord(this, 'target-${q.qNum}', 'source-${q.qNum}', '${q.qNum}')">${w}</span>`;
-            });
+            html += `<div class="drag-area" id="target-${q.qNum}" style="min-height:50px; border-bottom:2px solid #fb8c00; margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; padding:5px;"></div>`;
+            html += `<div class="drag-area" id="source-${q.qNum}" style="display:flex; gap:10px; flex-wrap:wrap;">`;
+            if (!answers['Q'+q.qNum]) {
+                q.words.forEach(w => {
+                    html += `<span class="word-chip" style="background:#e0f7fa; padding:8px 15px; border-radius:20px; border:1px solid #4dd0e1; cursor:pointer;" onclick="moveWord(this, 'target-${q.qNum}', 'source-${q.qNum}', '${q.qNum}')">${w}</span>`;
+                });
+            } else {
+                q.words.forEach(w => {
+                    html += `<span class="word-chip" onclick="moveWord(this, 'target-${q.qNum}', 'source-${q.qNum}', '${q.qNum}')">${w}</span>`;
+                });
+            }
             html += `</div>`;
         }
-
     } else {
-        // 口语模式
         html += `<div class="teacher-guide">💡 参考: ${q.guide || q.audioText || '...'}</div>`;
         html += `<div class="emoji-row">`;
         [1,2,3,4,5].forEach(score => {
@@ -129,105 +116,68 @@ function renderQuestion() {
         });
         html += `</div>`;
     }
-
     document.getElementById('qContent').innerHTML = html;
 }
 
-// 交互: 选择题
 function choose(qid, val) { answers['Q'+qid] = val; renderQuestion(); }
-
-// 交互: 拖拽题 (点击移动) - 🔥 新增逻辑 🔥
 function moveWord(el, targetId, sourceId, qid) {
     const target = document.getElementById(targetId);
     const source = document.getElementById(sourceId);
-    
-    // 如果当前在源区域，移去目标区域；反之亦然
-    if (el.parentElement.id === sourceId) {
-        target.appendChild(el);
-    } else {
-        source.appendChild(el);
-    }
-    
-    // 实时保存答案：把目标区域的单词连成句子
+    if (el.parentElement.id === sourceId) target.appendChild(el); else source.appendChild(el);
     const sentence = Array.from(target.children).map(span => span.innerText).join(' ');
     answers['Q'+qid] = sentence;
 }
-
 function rate(qid, score) { answers['Q'+qid] = score; renderQuestion(); }
 function prevQ() { if(currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
 function nextQ() { if(currentQIndex < currentData.questions.length - 1) { currentQIndex++; renderQuestion(); } }
+function speak(text) { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = 0.9; window.speechSynthesis.speak(u); } }
+function toggleDisplay(id, show) { const el = document.getElementById(id); if(el) { if (show) el.classList.remove('hidden'); else el.classList.add('hidden'); el.style.display = show ? (id.startsWith('btn') ? 'inline-block' : 'block') : 'none'; } }
+function startTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { if(timeLeft <= 0) { clearInterval(timerInterval); submit(); return; } timeLeft--; const m = Math.floor(timeLeft/60).toString().padStart(2,'0'); const s = (timeLeft%60).toString().padStart(2,'0'); const display = document.getElementById('timerDisplay'); if(display) display.innerText = `${m}:${s}`; }, 1000); }
 
-function speak(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = 0.9;     
-        window.speechSynthesis.speak(u);
-    }
-}
-
-function toggleDisplay(id, show) {
-    const el = document.getElementById(id);
-    if(el) {
-        if (show) el.classList.remove('hidden'); else el.classList.add('hidden');
-        el.style.display = show ? (id.startsWith('btn') ? 'inline-block' : 'block') : 'none';
-    }
-}
-
-function startTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        if(timeLeft <= 0) { clearInterval(timerInterval); submit(); return; }
-        timeLeft--;
-        const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-        const s = (timeLeft%60).toString().padStart(2,'0');
-        const display = document.getElementById('timerDisplay');
-        if(display) display.innerText = `${m}:${s}`;
-    }, 1000);
-}
-
-// ================= ⭐⭐ 提交函数 (适配旧版 Google Sheet) ⭐⭐ =================
+// ================= ⭐⭐ 提交函数 (适配您的 8 列布局) ⭐⭐ =================
 function submit() {
     clearInterval(timerInterval);
     toggleDisplay('quizInterface', false);
     toggleDisplay('submittingBox', true);
-    let score = 0;
-    
-    // 判分
-    if(currentMode === 'speaking') { 
-        Object.values(answers).forEach(v => score += parseInt(v)); 
-    } else { 
-        currentData.questions.forEach(q => { 
-            const userAns = answers['Q'+q.qNum];
+
+    let totalScore = 0;
+    let scoreL = 0; // Listening
+    let scoreR = 0; // Reading
+    let scoreW = 0; // Writing
+
+    if (currentMode === 'speaking') {
+        Object.values(answers).forEach(v => totalScore += parseInt(v));
+    } else {
+        currentData.questions.forEach(q => {
+            const userAns = answers['Q' + q.qNum];
+            let isCorrect = false;
             if (q.type === 'drag-sort') {
-                // 拖拽题判分：忽略标点和空格
-                if (userAns && userAns.replace(/[.,?!]/g,'').trim() === q.correct.replace(/[.,?!]/g,'').trim()) score += 5;
+                if (userAns && userAns.replace(/[.,?!]/g,'').trim() === q.correct.replace(/[.,?!]/g,'').trim()) isCorrect = true;
             } else {
-                if (userAns === q.correct) score += 5; 
+                if (userAns === q.correct) isCorrect = true;
             }
-        }); 
+            if (isCorrect) {
+                totalScore += 5;
+                if (q.part === 'A') scoreL += 5;
+                else if (q.part === 'B') scoreR += 5;
+                else if (q.part === 'C') scoreW += 5;
+            }
+        });
     }
 
-    // 计算百分比 (为了填 Google Sheet F列)
-    let maxScore = currentData.questions.length * 5;
-    let percent = Math.round((score / maxScore) * 100) + "%";
-
-    // 📦 构造数据包：字段名必须完全对应您旧版代码的要求！
     const payload = {
-        timestamp: new Date().toLocaleString(),  // A列
-        module: currentData.title,               // B列
-        timeTaken: "N/A",                        // C列
-        studentLabel: document.getElementById('studentNameDisplay').innerText, // D列 (注意这里用的是 studentLabel)
-        totalScore: score,                       // E列
-        totalPercent: percent,                   // F列
+        studentName: document.getElementById('studentNameDisplay').innerText,
+        lessonTitle: currentData.title,
+        examType: currentMode,
+        score: totalScore, 
         
-        // G-I列 (分项分暂未计算，填横线防报错)
-        listeningScore: "-", 
-        readingScore: "-",
-        writingScore: "-"
+        // 分项成绩 (如果不是笔试，发空字符串，方便后端合并)
+        listeningScore: currentMode === 'written' ? scoreL : "", 
+        readingScore:   currentMode === 'written' ? scoreR : "",
+        writingScore:   currentMode === 'written' ? scoreW : ""
     };
     
-    console.log("Submitting to Google Sheet:", payload);
+    console.log("Submitting:", payload);
     
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST', mode: 'no-cors',
@@ -236,10 +186,10 @@ function submit() {
     }).then(() => {
         toggleDisplay('submittingBox', false);
         toggleDisplay('resultBox', true);
-        document.getElementById('finalScore').innerText = score;
+        document.getElementById('finalScore').innerText = totalScore;
     }).catch(err => {
         toggleDisplay('submittingBox', false);
         toggleDisplay('resultBox', true);
-        document.getElementById('finalScore').innerText = score;
+        document.getElementById('finalScore').innerText = totalScore;
     });
 }
