@@ -1,21 +1,7 @@
 window.LOAD_QUIZ({
-    title: "Unit 2 Lesson 2: How many ducks",
-    mode: "written", 
+    title: "Unit 1 Lesson 2: What's your name?",
     timeLimit: 540,
-
-    images: {
-        'num_01': 'img/num_01.png',
-        'num_02': 'img/num_02.png',
-        'num_03': 'img/num_03.png',
-        'num_04': 'img/num_04.png',
-        'num_05': 'img/num_05.png',
-        'num_06': 'img/num_06.png',
-        'num_09': 'img/num_09.png',
-        'num_10': 'img/num_10.png',
-        'park': 'img/cene_park.png',
-        'great': 'img/badge_great.png',
-        'ice_cream_10': 'img/ice_cream_10.png'
-    },
+    // CRITICAL: NO images object here! System handles it.
 
     questions: [
         // ================= Part A: Listening (听力 25分) =================
@@ -24,158 +10,157 @@ window.LOAD_QUIZ({
             qNum: 1,
             part: 'A',
             type: 'select',
-            score: 5, 
-            text: '听录音，选出正确的图片。',
-            audioText: 'I have five ice creams.',
-            options: ['image:num_03', 'image:num_05', 'image:num_09', 'image:num_04'],
-            correct: 'image:num_05'
+            score: 5,
+            text: '听录音，选出你听到的单词。',
+            audioText: 'My name is Li Li.',
+            options: ['name', 'nice', 'nine', 'no'],
+            correct: 'name'
         },
         {
             qNum: 2,
             part: 'A',
             type: 'select',
-            score: 5, 
-            text: '听录音，选出正确的数字图片。',
-            imageKey: 'ice_cream_10',  
-            audioText: 'How many ice creams? Ten ice creams.',
-            options: ['image:num_04', 'image:num_05', 'image:num_10', 'image:num_02'],
-            correct: 'image:num_10'
+            score: 5,
+            text: '听录音，选出正确的图片。<br><span style="color:gray;font-size:0.9em">(Look! It\'s a dog.)</span>',
+            audioText: 'Look! It\'s a dog.',
+            // 选项严格对应截图文件名 (不带后缀)
+            options: ['image:u1_cat', 'image:u1_dog', 'image:u1_miss_gao', 'image:u1_boy'],
+            correct: 'image:u1_dog'
         },
         {
             qNum: 3,
             part: 'A',
             type: 'select',
-            score: 5, 
-            text: '听录音，选出中文意思。',
-            audioText: "Let's play a game!",
-            options: ['让我们玩游戏！', '你叫什么名字？', '这是我的朋友。', '很高兴见到你！'],
-            correct: '让我们玩游戏！'
+            score: 5,
+            text: '听录音，选出最合适的回答。',
+            audioText: 'What\'s your name, please?',
+            options: ['Hello.', 'My name is Li Li.', 'Nice to meet you.', 'Goodbye.'],
+            correct: 'My name is Li Li.'
         },
         {
             qNum: 4,
             part: 'A',
             type: 'select',
-            score: 5, 
-            text: '听录音，选出正确的单词。',
-            audioText: 'The number is three.',
-            options: ['one', 'two', 'three', 'four'], 
-            correct: 'three'
+            score: 5,
+            text: '听录音，选出最合适的回答。',
+            audioText: 'Nice to meet you.',
+            options: ['Nice to meet you, too.', 'I\'m fine.', 'Thank you.', 'Hi!'],
+            correct: 'Nice to meet you, too.'
         },
+        // ✅ Q5 已修改：改考 Lesson 1 核心词汇 "boy"，绝对不超纲
         {
             qNum: 5,
             part: 'A',
             type: 'select',
-            score: 5, 
-            text: '听录音，补全句子：OK, Let\'s ____!',
-            audioText: "OK, Let's play!",
-            options: ['go', 'look', 'play', 'great'],
-            correct: 'play'
+            score: 5,
+            text: '听录音，判断图片是否正确 (T/F)。',
+            // 图片是小男孩
+            imageUri: 'u1_boy.png', 
+            // 录音：这是一个男孩。
+            audioText: 'This is a boy.',
+            options: ['T', 'F'],
+            correct: 'T'
         },
 
         // ================= Part B: Reading (阅读 25分) =================
-        // ✅ 调整策略：全部改为“认读类”题目
         // 5道题，每题5分
         {
-            qNum: 6, // 原Q7
+            qNum: 6,
             part: 'B',
             type: 'select',
-            score: 5, 
-            text: '选择 "six" 对应的图片。',
-            options: ['image:num_01', 'image:num_09', 'image:num_06', 'image:num_02'],
-            correct: 'image:num_06'
+            score: 5,
+            text: '看图，选择单词的首字母。',
+            imageUri: 'u1_cat.png',
+            options: ['C', 'D', 'A', 'B'],
+            correct: 'C'
         },
         {
-            qNum: 7, // 原Q8
+            qNum: 7,
             part: 'B',
             type: 'select',
-            score: 5, 
-            text: '看图，How many ice creams? (有多少个冰淇淋？)',
-            imageKey: 'num_04', 
-            options: ['three', 'four', 'five', 'six'],
-            correct: 'four'
+            score: 5,
+            text: '读句子，选出对应的中文意思：<br><b>My name is Yang Ming.</b>',
+            options: ['这是我的朋友杨明。', '我的名字是杨明。', '杨明，你好。', '见到你很高兴。'],
+            correct: '我的名字是杨明。'
         },
         {
-            qNum: 8, // 原Q9
+            qNum: 8,
             part: 'B',
             type: 'select',
-            score: 5, 
-            text: '这是哪里？选出对应的单词。',
-            imageKey: 'park',
-            options: ['school', 'park', 'home', 'zoo'],
-            correct: 'park'
+            score: 5,
+            text: '看图，Miss Gao 是老师，初次见面应该怎么问候她？',
+            imageUri: 'u1_miss_gao.png',
+            options: ['Goodbye, Miss Gao.', 'What\'s your name?', 'Nice to meet you.', 'I am fine.'],
+            correct: 'Nice to meet you.'
         },
-        // ⬆️ 从写作部分提上来的认读题
         {
-            qNum: 9, 
+            qNum: 9,
             part: 'B',
             type: 'select',
-            score: 5, 
-            text: '数字 8 (Eight) 用英语怎么说？',
-            options: ['six', 'seven', 'eight', 'nine'],
-            correct: 'eight'
+            score: 5,
+            text: '读一读，选出不同类的一项 (Odd one out)。',
+            // cat/dog 是动物，apple 是水果
+            options: ['cat', 'dog', 'apple', 'name'], 
+            correct: 'name' 
         },
-        // ⬆️ 从写作部分提上来的认读题
         {
-            qNum: 10, 
+            qNum: 10,
             part: 'B',
             type: 'select',
-            score: 5, 
-            text: '看图，“太棒了”用英文怎么说？',
-            imageKey: 'great',
-            options: ['good', 'great', 'nice', 'fine'],
-            correct: 'great'
+            score: 5,
+            text: '看图补全对话：<br>Miss Gao: Hello!<br>Wang Tao: _______, Miss Gao.',
+            imageUri: 'u1_miss_gao.png',
+            options: ['Hi', 'What', 'Name', 'My'],
+            correct: 'Hi'
         },
-
 
         // ================= Part C: Writing (写作 25分) =================
-        // ✅ 调整策略：全部改为“排序/逻辑/句子”题目
         // 5道题，每题5分
         {
-            qNum: 11, // 原Q10
-            part: 'C',
-            type: 'select',
-            score: 5, 
-            text: '朋友回答正确，你想说“那是对的”，英语怎么说？',
-            options: ['That’s right.', 'That’s kite.', 'Really?', 'How many?'],
-            correct: 'That’s right.'
-        },
-        // ⬇️ 从阅读部分移下来的组句题
-        {
-            qNum: 12, 
+            qNum: 11,
             part: 'C',
             type: 'drag-sort',
-            score: 5, 
-            text: '点击单词，组成句子：(有多少只鸭子？)',
-            words: ['ducks', 'many', 'How', '?'], 
-            correct: 'How many ducks?'
+            score: 5,
+            text: '点击单词，连词成句：<br><span style="color:gray">(请问你叫什么名字？)</span>',
+            words: ['name', 'What\'s', 'your', 'please', '?'],
+            correct: 'What\'s your name please ?'
         },
         {
-            qNum: 13, // 原Q11
+            qNum: 12,
             part: 'C',
             type: 'drag-sort',
-            score: 5, 
-            text: '数字接龙：请按 1 到 5 的顺序排列单词。',
-            words: ['three', 'one', 'four', 'two', 'five'], 
-            correct: 'one two three four five'
+            score: 5,
+            text: '点击单词，连词成句：<br><span style="color:gray">(我的名字是莎莉。)</span>',
+            words: ['name', 'is', 'My', 'Sally', '.'],
+            correct: 'My name is Sally .'
         },
         {
-            qNum: 14, // 原Q12
+            qNum: 13,
             part: 'C',
             type: 'drag-sort',
-            score: 5, 
-            text: '数字接龙：请按 6 到 10 的顺序排列单词。',
-            words: ['nine', 'six', 'ten', 'eight', 'seven'], 
-            correct: 'six seven eight nine ten'
+            score: 5,
+            text: '点击单词，连词成句：<br><span style="color:gray">(见到你很高兴。)</span>',
+            words: ['Nice', 'meet', 'to', 'you', '.'],
+            correct: 'Nice to meet you .'
+        },
+        {
+            qNum: 14,
+            part: 'C',
+            type: 'drag-sort',
+            score: 5,
+            text: '字母排序：请按字母表顺序排列。',
+            words: ['D', 'A', 'C', 'B'],
+            correct: 'A B C D'
         },
         {
             qNum: 15,
             part: 'C',
             type: 'select',
-            score: 5, 
-            text: '看图完成句子：It\'s number _____ .',
-            imageKey: 'num_05',
-            options: ['four', 'five', 'six', 'fif'],
-            correct: 'five'
+            score: 5,
+            text: '看图补全单词：<b>__og</b> (狗)',
+            imageUri: 'u1_dog.png',
+            options: ['d', 'b', 'p', 'c'],
+            correct: 'd'
         }
     ]
 });
