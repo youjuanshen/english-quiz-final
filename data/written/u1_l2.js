@@ -1,23 +1,9 @@
 window.LOAD_QUIZ({
     title: "Unit 1 Lesson 2: What's your name?",
-    mode: "written",
     timeLimit: 540, // 9分钟
-
-    // ✅ 1. 图片资源配置
-    // 严格对应您截图中的文件名，路径统一为 img/xxx.png
-    // 左边是代码里用的“代号”(Key)，右边是您GitHub里的“文件名”(Value)
-    images: {
-        'cat': 'img/u1_cat.png',           // 对应截图 u1_cat.png
-        'dog': 'img/u1_dog.png',           // 对应截图 u1_dog.png
-        'miss_gao': 'img/u1_miss_gao.png', // 对应截图 u1_miss_gao.png
-        'boy': 'img/u1_boy.png',           // 对应截图 u1_boy.png
-        'girl': 'img/u1_girl.png',         // 对应截图 u1_girl.png
-        'apple': 'img/u1_apple.png'        // 对应截图 u1_apple.png (作为干扰项)
-    },
 
     questions: [
         // ================= Part A: Listening (听力 25分) =================
-        // 5道题，每题5分
         {
             qNum: 1,
             part: 'A',
@@ -35,9 +21,9 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出正确的图片。',
             audioText: 'Look! It\'s a dog.',
-            // ✅ 这里使用了上面定义的代号
-            options: ['image:cat', 'image:dog', 'image:miss_gao', 'image:boy'],
-            correct: 'image:dog'
+            // ✅ 修复：直接使用 u1_ 开头的真实文件名
+            options: ['image:u1_cat', 'image:u1_dog', 'image:u1_miss_gao', 'image:u1_boy'],
+            correct: 'image:u1_dog'
         },
         {
             qNum: 3,
@@ -65,22 +51,22 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '听录音，判断图片是 "T" (对) 还是 "F" (错)。',
-            // 使用 u1_boy.png 代表 "friend"
-            imageKey: 'boy', 
+            // ✅ 修复：改回 imageUri 且使用完整文件名
+            imageUri: 'u1_boy.png', 
             audioText: 'This is my friend.',
             options: ['T', 'F'],
             correct: 'T'
         },
 
         // ================= Part B: Reading (阅读 25分) =================
-        // 5道题，每题5分
         {
             qNum: 6,
             part: 'B',
             type: 'select',
             score: 5,
             text: '看图，选择单词的首字母。',
-            imageKey: 'cat', // 对应 u1_cat.png
+            // ✅ 修复：改回 imageUri
+            imageUri: 'u1_cat.png',
             options: ['C', 'D', 'A', 'B'],
             correct: 'C'
         },
@@ -99,7 +85,8 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '看图，Miss Gao 是老师，初次见面应该怎么问候她？',
-            imageKey: 'miss_gao', // 对应 u1_miss_gao.png
+            // ✅ 修复：改回 imageUri
+            imageUri: 'u1_miss_gao.png',
             options: ['Goodbye, Miss Gao.', 'What\'s your name?', 'Nice to meet you.', 'I am fine.'],
             correct: 'Nice to meet you.'
         },
@@ -109,7 +96,6 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '读一读，选出不同类的一项 (Odd one out)。',
-            // apple 也是您截图里有的图片，属于水果，其他是动物/名字
             options: ['cat', 'dog', 'name', 'apple'], 
             correct: 'name' 
         },
@@ -124,7 +110,6 @@ window.LOAD_QUIZ({
         },
 
         // ================= Part C: Writing (写作 25分) =================
-        // 5道题，每题5分
         {
             qNum: 11,
             part: 'C',
@@ -143,7 +128,6 @@ window.LOAD_QUIZ({
             words: ['name', 'is', 'My', 'Sally', '.'],
             correct: 'My name is Sally .'
         },
-        // ✅ 这里的句型已根据您的要求，从 "This is my friend" 改为 "Nice to meet you"
         {
             qNum: 13,
             part: 'C',
@@ -162,14 +146,14 @@ window.LOAD_QUIZ({
             words: ['D', 'A', 'C', 'B'],
             correct: 'A B C D'
         },
-        // ✅ 这里已根据您的要求，从 desk 改为 dog，并配图
         {
             qNum: 15,
             part: 'C',
             type: 'select',
             score: 5,
             text: '看图补全单词：__og (狗)',
-            imageKey: 'dog', // 对应 u1_dog.png
+            // ✅ 修复：改回 imageUri
+            imageUri: 'u1_dog.png',
             options: ['d', 'b', 'p', 'c'],
             correct: 'd'
         }
