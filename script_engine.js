@@ -1,6 +1,6 @@
-// ================= 全局配置 (V12.3 已更新最新链接) =================
+// ================= 全局配置 (V12.4 已更新最新链接) =================
 // ⚠️ 这里已经替换成了您刚刚发给我的新地址
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCcRH9FH1QRN7uTZS9FicL_zy_sb8r7N1WiTjqUga3dNA7PXkfTYtMrPKwHb_zE54f/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVB71TbVVEPjulRu6L3ExkeqmoVXALr4S3Kza1lQ8M4dA_UIRu3vQ_kE450ZaNQDil/exec";
 
 let currentData = null;
 let currentMode = '';
@@ -11,7 +11,7 @@ let timeLeft = 0;
 
 function initEngine(mode) {
     currentMode = mode;
-    console.log("Engine V12.3 Loaded: " + mode);
+    console.log("Engine V12.4 Loaded: " + mode);
 }
 
 window.LOAD_QUIZ = function(data) {
