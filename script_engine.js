@@ -1,4 +1,4 @@
-// ================= 全局配置 (V12.1 已更新链接) =================
+// ================= 全局配置 (V12.2 已更新最新链接) =================
 // ⚠️ 这里已经替换成了您刚刚发给我的新地址
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX-0dpSTmbd-NkhLTyK6u6l6U7KBU_m8CsVOt4p-2lS5FfPSfrAEbIcVjk2fNDjn5-/exec";
 
@@ -11,7 +11,7 @@ let timeLeft = 0;
 
 function initEngine(mode) {
     currentMode = mode;
-    console.log("Engine V12.1 Loaded: " + mode);
+    console.log("Engine V12.2 Loaded: " + mode);
 }
 
 window.LOAD_QUIZ = function(data) {
