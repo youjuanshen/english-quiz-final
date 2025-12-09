@@ -324,28 +324,36 @@ function submit() {
         mode: 'no-cors'
     });
 
-    // 5. 竞争：请求 vs. 超时
-    const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('TIMEOUT_ERROR')), TIMEOUT_MS)
-    );
-
+   // ----------------------------------------------------
+// 替换 script_engine.js 中 Promise.race 及其后续逻辑
+// ----------------------------------------------------
+    // 3. 竞争：请求 vs. 超时
     Promise.race([submissionPromise, timeoutPromise])
-        .then(() => {
-             // 请求成功完成 (在 no-cors 模式下，我们只能假设成功)
-             showFinalResult(totalScore, maxScore, feedback, true);
+        .then(response => {
+            // 4. 检查响应是否成功 (HTTP 状态码)
+            if (response.status !== 200 && response.status !== 0) { 
+                // 收到非 200/0 状态码 (如 Apps Script 返回的 400 或 403)
+                throw new Error('SERVER_BUSY_OR_ERROR');
+            }
+            // 如果 HTTP 状态码是 200 或 0 (mode: 'no-cors' 下的成功)，我们现在可以假设它成功写入
+            // 因为我们在 Apps Script 中移除了 200 状态下的错误返回，只在成功时返回 200。
+            showFinalResult(totalScore, maxScore, feedback, true);
         })
         .catch(error => {
-            // 收到超时错误 (TIMEOUT_ERROR) 或其他网络错误
+            // 5. 统一错误处理
             let message = "❌ 成绩提交失败：请检查网络后重试。";
             if (error.message === 'TIMEOUT_ERROR') {
-                 // 提交超时，可能是服务器繁忙（锁竞争）
-                message = "❌ 提交超时 (40秒)。服务器繁忙或网络断开，请等待片刻后再重试。";
+                 message = "❌ 提交超时 (40秒)。服务器繁忙或网络断开，请排队稍后重试。";
+            } else if (error.message === 'SERVER_BUSY_OR_ERROR') {
+                 // 捕获到 Apps Script 返回的 400 错误
+                 message = "❌ 服务器繁忙，请稍等一分钟，然后点击‘再来一次’重新提交。";
+            } else if (error.message.includes("failed to fetch")) {
+                 message = "❌ 网络连接中断，请检查 Wi-Fi。";
             }
             // ❌ 失败反馈
             showFinalResult(totalScore, maxScore, feedback, false, message);
         });
-}
-
+// ... (此逻辑位于 submit() 函数内部)
 
 // ------------------------------------------------------------------
 // 🔥 NEW: 统一显示结果函数 (Final Feedback Display) 🔥
