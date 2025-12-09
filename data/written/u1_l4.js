@@ -20,8 +20,8 @@ window.LOAD_QUIZ({
             text: '听录音，选出与内容描述相符的图片（介绍家人）。<br><span style="font-size:14px;color:#666">(Listen and choose the picture)</span>',
             audioText: 'This is Sally’s mother.',
             // 使用 u4_mother, u1_miss_gao, u1_girl 这三个图片资源
-            options: ['image:u4_mother', 'image:u1_miss_gao', 'image:u1_girl'],
-            correct: 'image:u4_mother'
+            options: ['image:u4_sally_s_mother', 'image:u1_miss gao', 'image:u1_girl'],
+            correct: 'image:u4_sally_s_mother'
         },
         {
             qNum: 2,
@@ -73,7 +73,7 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
-            imageUri: 'u4_mother.png',
+            imageUri: 'u4_sally_s_mother',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
         },
@@ -91,15 +91,21 @@ window.LOAD_QUIZ({
             correct: 'B. Nice to meet you, too.'
         },
         {
-            qNum: 8,
-            part: 'B',
-            type: 'true-false',
-            score: 5,
-            text: '看图，判断句子是否正确：This is a hen.<br><span style="font-size:14px;color:#666">(Look at the picture and judge if the sentence is correct)</span>',
-            imageUri: 'u1_hen.png', // 使用了 u1_hen.png
-            options: ['正确 (True)', '错误 (False)'],
-            correct: '正确 (True)'
-        },
+    qNum: 8,
+    part: 'B',
+    // 关键修改：将题型改为 judgement（判断）
+    type: 'judgement', 
+    score: 5,
+    text: '看图，判断句子是否正确：This is a hen.<br><span style="font-size:14px;color:#666">(Look at the picture and judge if the sentence is correct)</span>',
+    // 确保图片路径是正确的，且带有扩展名 .png
+    imageUri: 'u1_hen.png', 
+    
+    // 选项通常默认为 True/False 或 对/错，但为了保险，可以显式列出
+    options: ['A. True', 'B. False'], 
+    
+    // 正确答案：图为母鸡 (hen)，句子为 This is a hen. 故正确。
+    correct: 'A. True' 
+},
         {
             qNum: 9,
             part: 'B',
