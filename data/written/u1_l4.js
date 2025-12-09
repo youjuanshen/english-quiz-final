@@ -79,15 +79,16 @@ window.LOAD_QUIZ({
         {
     qNum: 7,
     part: 'B',
-    type: 'drag-match', // <--- 关键：确保前端识别这个类型
+    type: 'select',
     score: 5,
-    text: '将左侧的问候语拖拽到右侧对应的回应上。',
-    // 使用 pairs 字段定义匹配对
-    pairs: [
-        { left: 'Nice to meet you.', right: 'Nice to meet you, too.' },
-        { left: 'Have a good day!', right: 'Thank you, you too!' },
-        { left: 'Goodbye!', right: 'Bye!' }
+    text: '选择正确的应答语：Nice to meet you.',
+    options: [
+        'A. Hello!',
+        'B. Nice to meet you, too.', // 核心交际匹配
+        'C. Good morning.'
     ],
+    correct: 'B. Nice to meet you, too.'
+},
     // 答案格式必须是对象，键为 left，值为 right
     correct: { 
         'Nice to meet you.': 'Nice to meet you, too.', 
