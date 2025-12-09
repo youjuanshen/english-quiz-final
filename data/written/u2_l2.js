@@ -19,7 +19,6 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出录音中提到的数量。', 
             audioText: 'How many ice cream? Five.', 
-            // 数字图片已更新为 num_XX 格式
             options: ['image:num_03', 'image:num_05', 'image:num_09', 'image:num_10'], 
             correct: 'image:num_05' 
         },
@@ -65,7 +64,7 @@ window.LOAD_QUIZ({
         },
 
         // ===========================
-        // Part B: Reading (Target: 25 pts)
+        // Part B: Reading (Target: 25 pts) (重点考察理解和词汇语义)
         // ===========================
         { 
             qNum: 6, 
@@ -77,7 +76,6 @@ window.LOAD_QUIZ({
             options: ['A. cat', 'B. lion', 'C. duck', 'D. kite'], 
             correct: 'D. kite' 
         },
-        // Q7: 已从 drag-match 替换为 select
         { 
             qNum: 7, 
             part: 'B', 
@@ -87,58 +85,10 @@ window.LOAD_QUIZ({
             options: ['A. It’s a duck.', 'B. I’m eight.', 'C. Eight ducks.', 'D. That’s wrong.'], 
             correct: 'C. Eight ducks.' 
         },
+        // Q8 (原 Q13): 看图理解 (Reading)
         { 
             qNum: 8, 
             part: 'B', 
-            type: 'select', 
-            score: 5,
-            text: '选择正确的疑问词填空：<br>___ many ducks are there?', 
-            options: ['A. What', 'B. How', 'C. Who', 'D. Am'], 
-            correct: 'B. How' 
-        },
-        { 
-            qNum: 9, 
-            part: 'B', 
-            type: 'select', 
-            score: 5,
-            text: '当你想确认一个信息是否正确时，你会说：', 
-            options: ['A. Look!', 'B. Really?', 'C. Goodbye!', 'D. Nice to meet you.'], 
-            correct: 'B. Really?' 
-        },
-        { 
-            qNum: 10, 
-            part: 'B', 
-            type: 'select', 
-            score: 5,
-            text: '“那是正确的” 用英文应该怎么表达？', 
-            options: ['A. This is wrong.', 'B. That’s right.', 'C. How about it?', 'D. I’m fine.'], 
-            correct: 'B. That’s right.' 
-        },
-
-        // ===========================
-        // Part C: Writing (Target: 25 pts)
-        // ===========================
-        { 
-            qNum: 11, 
-            part: 'C', 
-            type: 'drag-sort', 
-            score: 5,
-            text: '连词成句。', 
-            words: ['many', 'How', 'ducks', '?'], 
-            correct: 'How many ducks ?' 
-        },
-        { 
-            qNum: 12, 
-            part: 'C', 
-            type: 'select', 
-            score: 5,
-            text: '请选出字母 L 的小写形式。 (Choose the lowercase letter L)', 
-            options: ['A. i', 'B. l', 'C. k', 'D. j'], 
-            correct: 'B. l' 
-        },
-        { 
-            qNum: 13, 
-            part: 'C', 
             type: 'select', 
             score: 5,
             text: '看图，选出正确的英文单词。', 
@@ -146,23 +96,79 @@ window.LOAD_QUIZ({
             options: ['A. cat', 'B. lion', 'C. duck', 'D. pig'], 
             correct: 'B. lion' 
         },
+        // Q9 (原 Q14): 语义理解 (Reading)
         { 
-            qNum: 14, 
-            part: 'C', 
+            qNum: 9, 
+            part: 'B', 
             type: 'select', 
             score: 5,
             text: '选出表示“许多的”英文单词。', 
             options: ['A. one', 'B. many', 'C. go', 'D. number'], 
             correct: 'B. many' 
         },
+        // Q10 (原 Q15): 中英文语义 (Reading)
         { 
-            qNum: 15, 
-            part: 'C', 
+            qNum: 10, 
+            part: 'B', 
             type: 'select', 
             score: 5,
             text: '请选出 “kite” 的中文意思。', 
             options: ['A. 狮子', 'B. 鸭子', 'C. 风筝', 'D. 冰激凌'], 
             correct: 'C. 风筝' 
+        },
+
+        // ===========================
+        // Part C: Writing (Target: 25 pts) (重点考察输出和结构)
+        // ===========================
+        // Q11 (原 Q8): 句型结构选择 (Writing)
+        { 
+            qNum: 11, 
+            part: 'C', 
+            type: 'select', 
+            score: 5,
+            text: '选择正确的疑问词填空：<br>___ many ducks?', 
+            options: ['A. What', 'B. How', 'C. Who', 'D. Am'], 
+            correct: 'B. How' 
+        },
+        // Q12 (原 Q9): 情景选择 (Reading) -> 移出
+        { 
+            qNum: 12, 
+            part: 'C', 
+            type: 'select', 
+            score: 5,
+            text: '当你想确认一个信息是否正确时，你会说：', 
+            options: ['A. Look!', 'B. Really?', 'C. Goodbye!', 'D. Nice to meet you.'], 
+            correct: 'B. Really?' 
+        },
+        // Q13 (原 Q10): 情景选择 (Reading) -> 移出
+        { 
+            qNum: 13, 
+            part: 'C', 
+            type: 'select', 
+            score: 5,
+            text: '“那是正确的” 用英文应该怎么表达？', 
+            options: ['A. This is wrong.', 'B. That’s right.', 'C. How about it?', 'D. I’m fine.'], 
+            correct: 'B. That’s right.' 
+        },
+        // Q14 (原 Q11): 连词成句 (Writing)
+        { 
+            qNum: 14, 
+            part: 'C', 
+            type: 'drag-sort', 
+            score: 5,
+            text: '连词成句。', 
+            words: ['many', 'How', 'ducks', '?'], 
+            correct: 'How many ducks ?' 
+        },
+        // Q15 (原 Q12): 字母选择 (Writing)
+        { 
+            qNum: 15, 
+            part: 'C', 
+            type: 'select', 
+            score: 5,
+            text: '请选出字母 L 的小写形式。 (Choose the lowercase letter L)', 
+            options: ['A. i', 'B. l', 'C. k', 'D. j'], 
+            correct: 'B. l' 
         }
     ]
 });
