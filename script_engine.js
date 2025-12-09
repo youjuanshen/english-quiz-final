@@ -1,4 +1,4 @@
-// ================= 全局配置 (V13.1 无参考版) =================
+// ================= 全局配置 (V13.1 无参考版 - FINAL) =================
 // ⚠️ 请确认这里是您最新的、可用的 Google Script 链接
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzknP8F74Eb3zacu_h1xUSiEPTDL2Da9c3BFpqHcQQy2XhVbQ4E5PudPIUDlxzbLIc/exec";
 
@@ -320,23 +320,26 @@ function submit() {
     const fullUrl = GOOGLE_SCRIPT_URL + '?' + queryParams;
     
     const submissionPromise = fetch(fullUrl, {
-        method: 'GET', // 强制使用 GET 模式，绕过复杂的 POST/CORS 问题
-        mode: 'no-cors'
+        method: 'GET', // 强制使用 GET 模式
+        mode: 'no-cors' // 保持 no-cors 以避免复杂的预检请求
     });
 
-   // ----------------------------------------------------
-// 替换 script_engine.js 中 Promise.race 及其后续逻辑
-// ----------------------------------------------------
-    // 3. 竞争：请求 vs. 超时
+    // 5. 竞争：请求 vs. 超时
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('TIMEOUT_ERROR')), TIMEOUT_MS)
+    );
+
     Promise.race([submissionPromise, timeoutPromise])
         .then(response => {
-            // 4. 检查响应是否成功 (HTTP 状态码)
+            // ⚠️ 由于 mode: 'no-cors'，浏览器无法读取响应内容，但可以读取状态码
+            // 我们在后端设置了：成功返回 200/0，错误返回 400/非 200
+            
             if (response.status !== 200 && response.status !== 0) { 
-                // 收到非 200/0 状态码 (如 Apps Script 返回的 400 或 403)
-                throw new Error('SERVER_BUSY_OR_ERROR');
+                 // 收到非 200/0 状态码 (如 Apps Script 返回的 400 或 403)
+                 throw new Error('SERVER_BUSY_OR_ERROR');
             }
-            // 如果 HTTP 状态码是 200 或 0 (mode: 'no-cors' 下的成功)，我们现在可以假设它成功写入
-            // 因为我们在 Apps Script 中移除了 200 状态下的错误返回，只在成功时返回 200。
+            
+            // 如果 HTTP 状态码是 200 或 0，且没有超时，则假设成功写入
             showFinalResult(totalScore, maxScore, feedback, true);
         })
         .catch(error => {
@@ -353,7 +356,8 @@ function submit() {
             // ❌ 失败反馈
             showFinalResult(totalScore, maxScore, feedback, false, message);
         });
-// ... (此逻辑位于 submit() 函数内部)
+}
+
 
 // ------------------------------------------------------------------
 // 🔥 NEW: 统一显示结果函数 (Final Feedback Display) 🔥
@@ -367,30 +371,30 @@ function showFinalResult(totalScore, maxScore, feedback, success, errorMessage =
 
     if (success) {
         mainContent = `
-            <div style="font-size:16px; color:#666; margin-bottom:10px;">你的最终得分</div>
-            <div class="big-score">
-                ${totalScore} <span class="total-score">/ ${maxScore} 分</span>
+            <div class="score-summary">
+                <div style="font-size:16px; color:#666; margin-bottom:10px;">你的最终得分</div>
+                <div class="big-score">
+                    ${totalScore} <span class="total-score">/ ${maxScore} 分</span>
+                </div>
+                <div class="feedback-box">
+                    ${feedback}
+                </div>
+                <p style="color:green; font-weight:bold;">✅ 成绩已成功上传。</p>
             </div>
-            <div class="feedback-box">
-                ${feedback}
-            </div>
-            <p style="color:green; font-weight:bold;">✅ 成绩已成功上传。</p>
         `;
     } else {
         mainContent = `
-            <div style="font-size:16px; color:#D9534F; font-weight:bold; margin-bottom:15px;">${errorMessage}</div>
             <div class="score-summary">
+                <div style="font-size:16px; color:#D9534F; font-weight:bold; margin-bottom:15px;">${errorMessage}</div>
                 本次笔试得分为：${totalScore} / ${maxScore} 分
+                <p>请尝试重新提交或联系老师手动记录。</p>
             </div>
-            <p>请尝试重新提交或联系老师手动记录。</p>
         `;
     }
 
     resultBox.innerHTML = `
         ${titleHTML}
-        <div class="score-summary">
-            ${mainContent}
-        </div>
+        ${mainContent}
         <button class="btn-primary" onclick="location.reload()" style="font-size:20px;">返回菜单 🚀</button>
     `;
     toggleDisplay('resultBox', true);
