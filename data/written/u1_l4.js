@@ -70,7 +70,7 @@ window.LOAD_QUIZ({
             part: 'B',
             type: 'select',
             score: 5,
-            text: '看图，请选出“介绍家人”的正确句型。<br><span style="font-size:14px;color:#666">(Look at the picture and choose the correct sentence for introduction)</span>',
+            text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
             imageUri: 'u1_mom.png',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
