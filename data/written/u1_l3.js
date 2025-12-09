@@ -45,12 +45,12 @@ window.LOAD_QUIZ({
         { 
             qNum: 4, 
             part: 'A', 
-            type: 'fill', 
+            type: 'select', 
             score: 5,
-            text: '听录音，写出缺失的单词。<br>I’m fine. ___ you.<br><span style="font-size:14px;color:#666">(Listen and fill in the blank)</span>', 
+            text: '听录音，选出缺失的单词完成句子：<br>I’m fine. ___ you.<br><span style="font-size:14px;color:#666">(Listen and choose the missing word)</span>', 
             audioText: 'I’m fine. Thank you.', 
-            correct: 'Thank',
-            hint: '提示：谢谢'
+            options: ['A. Hi', 'B. Thank', 'C. Good', 'D. Am'], 
+            correct: 'B. Thank' 
         },
         { 
             qNum: 5, 
