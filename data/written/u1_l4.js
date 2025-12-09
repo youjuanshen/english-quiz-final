@@ -19,8 +19,8 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出与内容描述相符的图片（介绍家人）。<br><span style="font-size:14px;color:#666">(Listen and choose the picture)</span>',
             audioText: 'This is my mother.',
-            options: ['image:u1_sally's mom', 'image:u1_miss gao', 'image:u1_girl'],
-            correct: 'image:u1_sally's mom'
+            options: ['image:u1_sally’s mom', 'image:u1_miss gao', 'image:u1_girl'],
+            correct: 'image:u1_sally’s mom'
         },
         {
             qNum: 2,
@@ -39,7 +39,7 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，将句子重新排序。<br><span style="font-size:14px;color:#666">(Listen and reorder the sentence)</span>',
             audioText: 'Goodbye, Li Li.',
-            words: ['Li Li', 'Goodbye', ',' , '.'],
+            words: ['Li Li', 'Goodbye', ',', '.'],
             correct: 'Goodbye , Li Li .'
         },
         {
@@ -70,7 +70,7 @@ window.LOAD_QUIZ({
             part: 'B',
             type: 'select',
             score: 5,
-            text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
+            text: '看图，请选出“介绍家人”的正确句型。<br><span style="font-size:14px;color:#666">(Look at the picture and choose the correct sentence for introduction)</span>',
             imageUri: 'u1_mom.png',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
@@ -134,7 +134,7 @@ window.LOAD_QUIZ({
             part: 'C',
             type: 'drag-sort',
             score: 5,
-            text: '连词成句（注意缩写）。<br><span style="font-size:14px;color:#666">(Reorder the words to form a sentence, mind the contraction)</span>',
+            text: '连词成句（介绍母亲）。<br><span style="font-size:14px;color:#666">(Reorder the words to form a sentence)</span>',
             words: ['mother', 'my', 'This', 'is', '.'],
             correct: 'This is my mother .'
         },
@@ -154,8 +154,8 @@ window.LOAD_QUIZ({
             score: 5,
             text: '看图，拖动字母组成正确的英文单词（女孩）。<br><span style="font-size:14px;color:#666">(Look at the picture and drag the letters to spell the word)</span>',
             imageUri: 'u1_girl.png',
-            words: ['r', 'i', 'g', 'l'], 
-            correct: 'g i r l' 
+            words: ['r', 'i', 'g', 'l'],
+            correct: 'g i r l'
         },
         {
             qNum: 15,
