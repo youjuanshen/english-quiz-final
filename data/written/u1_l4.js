@@ -73,7 +73,7 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
-            imageUri: 'image:u1_sally_s_mother',
+            imageUri: ''u1_sally_s_mother.png'',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
         },
