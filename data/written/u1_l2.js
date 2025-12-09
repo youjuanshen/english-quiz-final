@@ -42,7 +42,7 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出最合适的回答。',
             audioText: 'Nice to meet you.',
-            options: ['Nice to meet you, too.', 'I\'m fine.', 'Thank you.', 'Hi!'],
+            options: ['Nice to meet you, too.', 'I'm fine.', 'Thank you.', 'Hi!'],
             correct: 'Nice to meet you, too.'
         },
         {
