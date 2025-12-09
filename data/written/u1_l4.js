@@ -18,7 +18,7 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '听录音，选出与内容描述相符的图片（介绍家人）。<br><span style="font-size:14px;color:#666">(Listen and choose the picture)</span>',
-            audioText: 'This is my mother.',
+            audioText: 'This is Sally’s mother.',
             options: ['image:u1_sallys_mom', 'image:u1_miss gao', 'image:u1_girl'],
             correct: 'image:u1_sallys_mom'
         },
@@ -72,26 +72,29 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
-            imageUri: 'image:u1_sallys_mom',
+            imageUri: 'u1_sallys_mom.png',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
         },
         {
-            qNum: 7,
-            part: 'B',
-            type: 'match',
-            score: 5,
-            text: '阅读配对：将问句和正确的应答语匹配。<br><span style="font-size:14px;color:#666">(Match the question and the correct response)</span>',
-            // ✅ 修改后的结构：使用 match_pairs 字段来定义匹配对，以提高兼容性。
-            match_pairs: [ 
-                { q: 'Nice to meet you.', a: 'Nice to meet you, too.' },
-                { q: 'Have a good day!', a: 'Thank you, you too!' },
-                { q: 'Goodbye!', a: 'Bye!' }
-            ],
-            // 匹配题不再需要独立的 options 或 correct 字段
-            options: [],
-            correct: null
-        },
+    qNum: 7,
+    part: 'B',
+    type: 'drag-match', // <--- 关键：确保前端识别这个类型
+    score: 5,
+    text: '将左侧的问候语拖拽到右侧对应的回应上。',
+    // 使用 pairs 字段定义匹配对
+    pairs: [
+        { left: 'Nice to meet you.', right: 'Nice to meet you, too.' },
+        { left: 'Have a good day!', right: 'Thank you, you too!' },
+        { left: 'Goodbye!', right: 'Bye!' }
+    ],
+    // 答案格式必须是对象，键为 left，值为 right
+    correct: { 
+        'Nice to meet you.': 'Nice to meet you, too.', 
+        'Have a good day!': 'Thank you, you too!', 
+        'Goodbye!': 'Bye!' 
+    }
+}
         {
             qNum: 8,
             part: 'B',
