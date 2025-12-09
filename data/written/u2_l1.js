@@ -1,7 +1,7 @@
 /**
  * Unit 2 Lesson 1: Fun Numbers - Let's play!
  * File: data/written/u2_l1.js
- * Revision: Final v3.1 (Approved Version)
+ * Revision: Final v3.3 (Stable Version - Fixed Q7 & Q13 display issues)
  */
 window.LOAD_QUIZ({
     title: "Unit 2 Lesson 1: Fun Numbers",
@@ -18,7 +18,6 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出你听到的数字。<br><span style="font-size:14px;color:#666">(Listen and choose the number)</span>',
             audioText: 'Four.',
-            // 选项图片规则：image:文件名 (无后缀)
             options: ['image:u2_number_3', 'image:u2_number_4', 'image:u2_number_5', 'image:u2_number_6'],
             correct: 'image:u2_number_4'
         },
@@ -49,7 +48,6 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出对应的食物图片。<br><span style="font-size:14px;color:#666">(Listen and choose the food)</span>',
             audioText: 'Ice cream',
-            // 修正：已移除 imageUri，改为纯听力题
             options: ['image:u2_apple', 'image:u2_banana', 'image:u2_ice_cream', 'image:u2_jacket'],
             correct: 'image:u2_ice_cream'
         },
@@ -73,32 +71,29 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '看图，选出正确对应的英文单词。<br><span style="font-size:14px;color:#666">(Look and choose the word)</span>',
-            // 主图规则：必须带扩展名 (.png)
             imageUri: 'u2_park.png',
             options: ['A. school', 'B. park', 'C. home', 'D. zoo'],
             correct: 'B. park'
         },
+        // Q7 (Fix: Split match into select)
         {
             qNum: 7,
             part: 'B',
-            type: 'drag-match',
+            type: 'select',
             score: 5,
-            text: '将数字和对应的英文单词匹配。<br><span style="font-size:14px;color:#666">(Match the number to the word)</span>',
-            pairs: [
-                { left: '4', right: 'four' },
-                { left: '6', right: 'six' },
-                { left: '9', right: 'nine' }
-            ],
-            correct: { '4': 'four', '6': 'six', '9': 'nine' }
+            text: '数字 "4" 的英文单词是？<br><span style="font-size:14px;color:#666">(Choose the word for "4")</span>',
+            options: ['A. five', 'B. four', 'C. six', 'D. nine'],
+            correct: 'B. four'
         },
+        // Q8 (Fix: Split match into select)
         {
             qNum: 8,
             part: 'B',
             type: 'select',
             score: 5,
-            text: '按顺序数数：One, two, three... 后面是？<br><span style="font-size:14px;color:#666">(What comes next?)</span>',
-            options: ['A. five', 'B. four', 'C. ten', 'D. one'],
-            correct: 'B. four'
+            text: '数字 "9" 的英文单词是？<br><span style="font-size:14px;color:#666">(Choose the word for "9")</span>',
+            options: ['A. nine', 'B. six', 'C. ten', 'D. one'],
+            correct: 'A. nine'
         },
         {
             qNum: 9,
@@ -129,7 +124,6 @@ window.LOAD_QUIZ({
             type: 'drag-sort',
             score: 5,
             text: '连词成句，提出建议。<br><span style="font-size:14px;color:#666">(Reorder the words)</span>',
-            // 注意：使用智能引号 ’ 避免语法错误
             words: ['go', 'Let’s', '.'],
             correct: 'Let’s go .'
         },
@@ -142,15 +136,15 @@ window.LOAD_QUIZ({
             options: ['A. jacket', 'B. dog', 'C. ice cream', 'D. apple'],
             correct: 'C. ice cream'
         },
+        // Q13 (Fix: Changed to select for stability)
         {
             qNum: 13,
             part: 'C',
-            type: 'drag-sort',
+            type: 'select',
             score: 5,
-            // 修正：改为拖拽排序题，考察单词 'three' 的拼写
-            text: '将字母拖拽排序，拼写数字 "3"。<br><span style="font-size:14px;color:#666">(Drag and sort to spell: three)</span>',
-            words: ['e', 't', 'r', 'e', 'h'], 
-            correct: 't h r e e'
+            text: '请选出数字 "3" 的正确拼写。<br><span style="font-size:14px;color:#666">(Choose the correct spelling for "3")</span>',
+            options: ['A. treeh', 'B. three', 'C. hreet', 'D. eerht'],
+            correct: 'B. three'
         },
         {
             qNum: 14,
