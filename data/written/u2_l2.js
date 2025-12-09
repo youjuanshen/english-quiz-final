@@ -124,8 +124,8 @@ window.LOAD_QUIZ({
             type: 'drag-sort', 
             score: 5,
             text: '连词成句。', 
-            words: ['many', 'How', 'ducks', '?', 'are', 'there'], 
-            correct: 'How many ducks are there ?' 
+            words: ['many', 'How', 'ducks', '?'], 
+            correct: 'How many ducks ?' 
         },
         { 
             qNum: 12, 
