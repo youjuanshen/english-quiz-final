@@ -77,17 +77,15 @@ window.LOAD_QUIZ({
             options: ['A. cat', 'B. lion', 'C. duck', 'D. kite'], 
             correct: 'D. kite' 
         },
+        // Q7: 已从 drag-match 替换为 select
         { 
             qNum: 7, 
             part: 'B', 
-            type: 'drag-match', 
+            type: 'select', 
             score: 5,
-            text: '将问句与正确的回答匹配。', 
-            matches: [
-                { left: 'How many ducks?', right: 'Six ducks.' },
-                { left: 'Really?', right: 'Yes. That’s right.' }
-            ],
-            correct: ['How many ducks?|Six ducks.', 'Really?|Yes. That’s right.'] 
+            text: '选出对问句 **"How many ducks?"** 最合适的回答。', 
+            options: ['A. It’s a duck.', 'B. I’m eight.', 'C. Eight ducks.', 'D. That’s wrong.'], 
+            correct: 'C. Eight ducks.' 
         },
         { 
             qNum: 8, 
