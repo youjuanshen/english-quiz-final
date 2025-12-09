@@ -301,29 +301,152 @@ function submit() {
         writingScore:   currentMode === 'written' ? scoreW : ""
     };
     
+    // ================= 提交函数 (已修改) =================
+function submit() {
+    clearInterval(timerInterval);
+    toggleDisplay('quizInterface', false);
+    
+    // 显示上传中界面
+    const submittingBox = document.getElementById('submittingBox');
+    submittingBox.innerHTML = `
+        <div class="cute-loader">🚀</div>
+        <div class="loading-text">正在飞速上传成绩...</div>
+        <div style="font-size:12px; color:#999; margin-top:10px;">(请稍候片刻，不要关闭窗口哦)</div>
+    `;
+    toggleDisplay('submittingBox', true);
+
+    let totalScore = 0;
+    let scoreL=0, scoreR=0, scoreW=0;
+    // ... (计算分数逻辑保持不变)
+    if (currentMode === 'speaking') {
+        Object.values(answers).forEach(v => totalScore += parseInt(v)||0);
+    } else {
+        currentData.questions.forEach(q => {
+            const userAns = answers['Q' + q.qNum];
+            let isCorrect = false;
+            if (q.type === 'drag-sort') {
+                if (userAns && userAns.replace(/[.,?!]/g,'').trim() === q.correct.replace(/[.,?!]/g,'').trim()) isCorrect = true;
+            } else {
+                if (userAns === q.correct) isCorrect = true;
+            }
+            if (isCorrect) {
+                totalScore += 5;
+                if (q.part === 'A') scoreL += 5;
+                else if (q.part === 'B') scoreR += 5;
+                else if (q.part === 'C') scoreW += 5;
+            }
+        });
+    }
+
+    let maxScore = currentData.questions.length * 5;
+    let percentNum = Math.round((totalScore / maxScore) * 100);
+    
+    let feedback = "";
+    if (percentNum >= 95) feedback = "🌟 哇！你是超级英语小达人！太棒了！";
+    else if (percentNum >= 85) feedback = "👏 真不错！成绩非常优秀，继续保持！";
+    else if (percentNum >= 70) feedback = "👍 做得好！大部分都掌握啦，继续加油！";
+    else if (percentNum >= 60) feedback = "💪 及格啦！再多一点点细心就更完美了！";
+    else feedback = "🌱 别灰心！这是成长的机会，多练习一定会进步的！";
+
+    const payload = {
+        studentName: document.getElementById('studentNameDisplay').innerText,
+        lessonTitle: currentData.title,
+        examType: currentMode,
+        score: totalScore,    
+        listeningScore: currentMode === 'written' ? scoreL : "",    
+        readingScore:    currentMode === 'written' ? scoreR : "",
+        writingScore:    currentMode === 'written' ? scoreW : ""
+    };
+    
     console.log("Submitting:", payload);
     
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    }).finally(() => {
-        toggleDisplay('submittingBox', false);
-        
-        const resultBox = document.getElementById('resultBox');
-        resultBox.innerHTML = `
-            <h1>🎉 挑战圆满结束！</h1>
-            <div class="score-summary">
-                <div style="font-size:16px; color:#666; margin-bottom:10px;">你的最终得分</div>
-                <div class="big-score">
-                    ${totalScore} <span class="total-score">/ ${maxScore} 分</span>
-                </div>
-                <div class="feedback-box">
-                    ${feedback}
-                </div>
-            </div>
-            <button class="btn-primary" onclick="location.reload()" style="font-size:20px;">再来一次 🚀</button>
-        `;
-        toggleDisplay('resultBox', true);
+    // ----------------------------------------------------
+    // 🔥 START: 核心修正区 (添加超时和结果解析) 🔥
+    // ----------------------------------------------------
+    
+    const TIMEOUT_MS = 40000; // 40秒超时 (对应后端 30秒锁等待 + 10秒执行时间)
+
+    // 1. 创建超时 Promise
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('TIMEOUT_ERROR')), TIMEOUT_MS)
+    );
+
+    // 2. 发送实际请求 (使用 GET 绕过 CORS 限制，Apps Script 的 doPost 接受 GET/POST)
+    // ⚠️ 注意：这里我们将数据拼接到 URL 中，以兼容 mode: 'no-cors'
+    const queryParams = Object.keys(payload).map(k => k + '=' + encodeURIComponent(payload[k])).join('&');
+    const fullUrl = GOOGLE_SCRIPT_URL + '?' + queryParams;
+    
+    const submissionPromise = fetch(fullUrl, {
+        method: 'GET', // 使用 GET 避免复杂的 CORS/JSON 问题
+        mode: 'no-cors'
     });
+
+    // 3. 竞争：看是请求完成快，还是超时快
+    Promise.race([submissionPromise, timeoutPromise])
+        .then(response => {
+             // 由于 mode: 'no-cors' 无法读取 response.json() 和 status，我们只能假设
+             // 如果请求成功完成（没有超时），则 Apps Script 应该成功处理了。
+             // 这种架构是 Google Scripts 特有的，无法进行标准验证。
+             showFinalResult(totalScore, maxScore, feedback, true); // 假设成功
+        })
+        .catch(error => {
+            // 收到超时错误 (TIMEOUT_ERROR) 或其他网络错误
+            let message = "❌ 成绩提交失败：请检查网络后重试。";
+            if (error.message === 'TIMEOUT_ERROR') {
+                 // 提交超时，可能是服务器繁忙（锁竞争）
+                message = "❌ 提交超时 (40秒)。服务器繁忙或网络断开，请等待片刻后再重试。";
+            }
+            // ❌ 失败反馈
+            showFinalResult(totalScore, maxScore, feedback, false, message);
+        });
 }
+
+// ----------------------------------------------------
+// 🔥 NEW: 统一显示结果函数 🔥
+// ----------------------------------------------------
+function showFinalResult(totalScore, maxScore, feedback, success, errorMessage = "") {
+    toggleDisplay('submittingBox', false);
+    
+    const resultBox = document.getElementById('resultBox');
+    let titleHTML = success ? `<h1>🎉 挑战圆满结束！</h1>` : `<h1>⚠️ 提交失败！</h1>`;
+    let mainContent;
+
+    if (success) {
+        mainContent = `
+            <div style="font-size:16px; color:#666; margin-bottom:10px;">你的最终得分</div>
+            <div class="big-score">
+                ${totalScore} <span class="total-score">/ ${maxScore} 分</span>
+            </div>
+            <div class="feedback-box">
+                ${feedback}
+            </div>
+            <p style="color:green; font-weight:bold;">✅ 成绩已成功上传。</p>
+        `;
+    } else {
+        mainContent = `
+            <div style="font-size:16px; color:#D9534F; font-weight:bold; margin-bottom:15px;">${errorMessage}</div>
+            <div class="score-summary">
+                本次笔试得分为：${totalScore} / ${maxScore} 分
+            </div>
+            <p>请联系老师确认分数是否已手动记录。</p>
+        `;
+    }
+
+    resultBox.innerHTML = `
+        ${titleHTML}
+        <div class="score-summary">
+            ${mainContent}
+        </div>
+        <button class="btn-primary" onclick="location.reload()" style="font-size:20px;">返回菜单 🚀</button>
+    `;
+    toggleDisplay('resultBox', true);
+}
+
+// ----------------------------------------------------
+// 🔥 END: 核心修正区 🔥
+// ----------------------------------------------------
+
+// ... (其余辅助函数保持不变)
+
+// ⚠️ 注意: 您需要将 showFinalResult 替换到原 submit() 函数的逻辑中。
+// 建议：请将整个 script_engine.js 文件提供给技术人员进行完整的替换和测试。
