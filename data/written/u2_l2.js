@@ -19,9 +19,9 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出录音中提到的数量。', 
             audioText: 'How many ice cream? Five.', 
-            // 题图选项使用数字图片，系统自动匹配
-            options: ['image:u2_number_3', 'image:u2_number_5', 'image:u2_number_8', 'image:u2_number_10'], 
-            correct: 'image:u2_number_5' 
+            // 数字图片已更新为 num_XX 格式
+            options: ['image:num_03', 'image:num_05', 'image:num_09', 'image:num_10'], 
+            correct: 'image:num_05' 
         },
         { 
             qNum: 2, 
