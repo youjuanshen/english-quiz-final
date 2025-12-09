@@ -60,8 +60,8 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出你听到的字母大写形式。<br><span style="font-size:14px;color:#666">(Listen and choose the capital letter)</span>',
             audioText: 'H H',
-            options: ['A. H', 'B. I', 'C. G', 'D. K'],
-            correct: 'A. H'
+            options: ['A. Hh', 'B. Ii', 'Cc. Gg', 'D. Kk'],
+            correct: 'A. Hh'
         },
         
         // ===========================
@@ -73,7 +73,7 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
-            imageUri: 'u1_sally_s_mother',
+            imageUri: 'image:u1_sally_s_mother',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
         },
