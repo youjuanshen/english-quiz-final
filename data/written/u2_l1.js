@@ -48,7 +48,7 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出对应的食物图片。<br><span style="font-size:14px;color:#666">(Listen and choose the food)</span>',
             audioText: 'Ice cream',
-            options: ['image:u1_apple', 'image:u1_banana', 'image:u1_ice_cream', 'image:u2_jacket'],
+            options: ['image:u1_apple', 'image:u1_banana', 'image:u2_ice_cream', 'image:u2_jacket'],
             correct: 'image:u2_ice_cream'
         },
         {
