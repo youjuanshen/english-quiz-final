@@ -1,166 +1,170 @@
+/**
+ * Unit 2 Lesson 2: How many ducks?
+ * File: data/written/u2_l2.js
+ */
 window.LOAD_QUIZ({
-    title: "Unit 1 Lesson 2: What's your name? (测试版)", // 加个尾巴,
-    timeLimit: 540,
-    // CRITICAL: NO images object here! System handles it.
+    title: "Unit 2 Lesson 2: How many ducks?",
+    timeLimit: 540, // 9 minutes
+
+    // ⛔️ DO NOT ADD 'images: {}' MAPPING HERE!
 
     questions: [
-        // ================= Part A: Listening (听力 25分) =================
-        // 5道题，每题5分
-        {
-            qNum: 1,
-            part: 'A',
-            type: 'select',
+        // ===========================
+        // Part A: Listening (Target: 25 pts)
+        // ===========================
+        { 
+            qNum: 1, 
+            part: 'A', 
+            type: 'select', 
             score: 5,
-            text: '听录音，选出你听到的单词。',
-            audioText: 'My name is Li Li.',
-            options: ['name', 'nice', 'nine', 'no'],
-            correct: 'name'
+            text: '听录音，选出录音中提到的数量。', 
+            audioText: 'How many ice cream? Five.', 
+            // 题图选项使用数字图片，系统自动匹配
+            options: ['image:u2_number_3', 'image:u2_number_5', 'image:u2_number_8', 'image:u2_number_10'], 
+            correct: 'image:u2_number_5' 
         },
-        {
-            qNum: 2,
-            part: 'A',
-            type: 'select',
+        { 
+            qNum: 2, 
+            part: 'A', 
+            type: 'select', 
             score: 5,
-            text: '听录音，选出正确的图片。<br><span style="color:gray;font-size:0.9em">(Look! It\'s a dog.)</span>',
-            audioText: 'Look! It\'s a dog.',
-            // 选项严格对应截图文件名 (不带后缀)
-            options: ['image:u1_cat', 'image:u1_dog', 'image:u1_miss_gao', 'image:u1_boy'],
-            correct: 'image:u1_dog'
+            text: '听录音，选出正确的问句。', 
+            audioText: 'How many kites?', 
+            options: ['A. How are you?', 'B. How old are you?', 'C. How many kites?', 'D. What’s your name?'], 
+            correct: 'C. How many kites?' 
         },
-        {
-            qNum: 3,
-            part: 'A',
-            type: 'select',
+        { 
+            qNum: 3, 
+            part: 'A', 
+            type: 'select', 
             score: 5,
-            text: '听录音，选出最合适的回答。',
-            audioText: 'What\'s your name, please?',
-            options: ['Hello.', 'My name is Li Li.', 'Nice to meet you.', 'Goodbye.'],
-            correct: 'My name is Li Li.'
+            text: '听录音，选出你听到的动物图片。', 
+            audioText: 'Look! A lion!', 
+            options: ['image:u2_lion', 'image:u2_duck', 'image:u2_monkey', 'image:u1_cat'], 
+            correct: 'image:u2_lion' 
         },
-        {
-            qNum: 4,
-            part: 'A',
-            type: 'select',
+        { 
+            qNum: 4, 
+            part: 'A', 
+            type: 'drag-sort', 
             score: 5,
-            text: '听录音，选出最合适的回答。',
-            audioText: 'Nice to meet you.',
-            options: ['Nice to meet you, too.', 'I\'m fine.', 'Thank you.', 'Hi!'],
-            correct: 'Nice to meet you, too.'
+            text: '听录音，拖拽单词组成句子。', 
+            audioText: 'Yes. That’s right.', 
+            words: ['That’s', 'right', 'Yes', '.'], 
+            correct: 'Yes That’s right .' 
         },
-        // ✅ Q5 已修改：改考 Lesson 1 核心词汇 "boy"，绝对不超纲
-        {
-            qNum: 5,
-            part: 'A',
-            type: 'select',
+        { 
+            qNum: 5, 
+            part: 'A', 
+            type: 'select', 
             score: 5,
-            text: '听录音，判断图片是否正确 (T/F)。',
-            // 图片是小男孩
-            imageUri: 'u1_boy.png', 
-            // 录音：这是一个男孩。
-            audioText: 'This is a boy.',
-            options: ['T', 'F'],
-            correct: 'T'
+            text: '听录音，选出最合适的回答。', 
+            audioText: 'How many cats? Ten.', 
+            options: ['A. Ten.', 'B. I’m fine.', 'C. It’s green.', 'D. Nice to meet you.'], 
+            correct: 'A. Ten.' 
         },
 
-        // ================= Part B: Reading (阅读 25分) =================
-        // 5道题，每题5分
-        {
-            qNum: 6,
-            part: 'B',
-            type: 'select',
+        // ===========================
+        // Part B: Reading (Target: 25 pts)
+        // ===========================
+        { 
+            qNum: 6, 
+            part: 'B', 
+            type: 'select', 
             score: 5,
-            text: '看图，选择单词的首字母。',
-            imageUri: 'u1_cat.png',
-            options: ['C', 'D', 'A', 'B'],
-            correct: 'C'
+            text: '看图，选出正确的英文单词。', 
+            imageUri: 'u2_kite.png', 
+            options: ['A. cat', 'B. lion', 'C. duck', 'D. kite'], 
+            correct: 'D. kite' 
         },
-        {
-            qNum: 7,
-            part: 'B',
-            type: 'select',
+        { 
+            qNum: 7, 
+            part: 'B', 
+            type: 'drag-match', 
             score: 5,
-            text: '读句子，选出对应的中文意思：<br><b>My name is Yang Ming.</b>',
-            options: ['这是我的朋友杨明。', '我的名字是杨明。', '杨明，你好。', '见到你很高兴。'],
-            correct: '我的名字是杨明。'
+            text: '将问句与正确的回答匹配。', 
+            matches: [
+                { left: 'How many ducks?', right: 'Six ducks.' },
+                { left: 'Really?', right: 'Yes. That’s right.' }
+            ],
+            correct: ['How many ducks?|Six ducks.', 'Really?|Yes. That’s right.'] 
         },
-        {
-            qNum: 8,
-            part: 'B',
-            type: 'select',
+        { 
+            qNum: 8, 
+            part: 'B', 
+            type: 'select', 
             score: 5,
-            text: '看图，Miss Gao 是老师，初次见面应该怎么问候她？',
-            imageUri: 'u1_miss_gao.png',
-            options: ['Goodbye, Miss Gao.', 'What\'s your name?', 'Nice to meet you.', 'I am fine.'],
-            correct: 'Nice to meet you.'
+            text: '选择正确的疑问词填空：<br>___ many ducks are there?', 
+            options: ['A. What', 'B. How', 'C. Who', 'D. Am'], 
+            correct: 'B. How' 
         },
-        {
-            qNum: 9,
-            part: 'B',
-            type: 'select',
+        { 
+            qNum: 9, 
+            part: 'B', 
+            type: 'select', 
             score: 5,
-            text: '读一读，选出不同类的一项 (Odd one out)。',
-            // cat/dog 是动物，apple 是水果
-            options: ['cat', 'dog', 'apple', 'name'], 
-            correct: 'name' 
+            text: '当你想确认一个信息是否正确时，你会说：', 
+            options: ['A. Look!', 'B. Really?', 'C. Goodbye!', 'D. Nice to meet you.'], 
+            correct: 'B. Really?' 
         },
-        {
-            qNum: 10,
-            part: 'B',
-            type: 'select',
+        { 
+            qNum: 10, 
+            part: 'B', 
+            type: 'select', 
             score: 5,
-            text: '看图补全对话：<br>Miss Gao: Hello!<br>Wang Tao: _______, Miss Gao.',
-            imageUri: 'u1_miss_gao.png',
-            options: ['Hi', 'What', 'Name', 'My'],
-            correct: 'Hi'
+            text: '“那是正确的” 用英文应该怎么表达？', 
+            options: ['A. This is wrong.', 'B. That’s right.', 'C. How about it?', 'D. I’m fine.'], 
+            correct: 'B. That’s right.' 
         },
 
-        // ================= Part C: Writing (写作 25分) =================
-        // 5道题，每题5分
-        {
-            qNum: 11,
-            part: 'C',
-            type: 'drag-sort',
+        // ===========================
+        // Part C: Writing (Target: 25 pts)
+        // ===========================
+        { 
+            qNum: 11, 
+            part: 'C', 
+            type: 'drag-sort', 
             score: 5,
-            text: '点击单词，连词成句：<br><span style="color:gray">(请问你叫什么名字？)</span>',
-            words: ['name', 'What\'s', 'your', 'please', '?'],
-            correct: 'What\'s your name please ?'
+            text: '连词成句。', 
+            words: ['many', 'How', 'ducks', '?', 'are', 'there'], 
+            correct: 'How many ducks are there ?' 
         },
-        {
-            qNum: 12,
-            part: 'C',
-            type: 'drag-sort',
+        { 
+            qNum: 12, 
+            part: 'C', 
+            type: 'select', 
             score: 5,
-            text: '点击单词，连词成句：<br><span style="color:gray">(我的名字是莎莉。)</span>',
-            words: ['name', 'is', 'My', 'Sally', '.'],
-            correct: 'My name is Sally .'
+            text: '请选出字母 L 的小写形式。 (Choose the lowercase letter L)', 
+            options: ['A. i', 'B. l', 'C. k', 'D. j'], 
+            correct: 'B. l' 
         },
-        {
-            qNum: 13,
-            part: 'C',
-            type: 'drag-sort',
+        { 
+            qNum: 13, 
+            part: 'C', 
+            type: 'select', 
             score: 5,
-            text: '点击单词，连词成句：<br><span style="color:gray">(见到你很高兴。)</span>',
-            words: ['Nice', 'meet', 'to', 'you', '.'],
-            correct: 'Nice to meet you .'
+            text: '看图，选出正确的英文单词。', 
+            imageUri: 'u2_lion.png', 
+            options: ['A. cat', 'B. lion', 'C. duck', 'D. pig'], 
+            correct: 'B. lion' 
         },
-        {
-            qNum: 14,
-            part: 'C',
-            type: 'drag-sort',
+        { 
+            qNum: 14, 
+            part: 'C', 
+            type: 'select', 
             score: 5,
-            text: '字母排序：请按字母表顺序排列。',
-            words: ['D', 'A', 'C', 'B'],
-            correct: 'A B C D'
+            text: '选出表示“许多的”英文单词。', 
+            options: ['A. one', 'B. many', 'C. go', 'D. number'], 
+            correct: 'B. many' 
         },
-        {
-            qNum: 15,
-            part: 'C',
-            type: 'select',
+        { 
+            qNum: 15, 
+            part: 'C', 
+            type: 'select', 
             score: 5,
-            text: '看图补全单词：<b>__og</b> (狗)',
-            imageUri: 'u1_dog.png',
-            options: ['d', 'b', 'p', 'c'],
-            correct: 'd'
+            text: '请选出 “kite” 的中文意思。', 
+            options: ['A. 狮子', 'B. 鸭子', 'C. 风筝', 'D. 冰激凌'], 
+            correct: 'C. 风筝' 
         }
     ]
 });
