@@ -19,8 +19,8 @@ window.LOAD_QUIZ({
             score: 5,
             text: '听录音，选出与内容描述相符的图片（介绍家人）。<br><span style="font-size:14px;color:#666">(Listen and choose the picture)</span>',
             audioText: 'This is my mother.',
-            options: ['image:u1_sally’s mom', 'image:u1_miss gao', 'image:u1_girl'],
-            correct: 'image:u1_sally’s mom'
+            options: ['image:u1_sallys_mom', 'image:u1_miss gao', 'image:u1_girl'],
+            correct: 'image:u1_sallys_mom'
         },
         {
             qNum: 2,
