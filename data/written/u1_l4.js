@@ -53,14 +53,15 @@ window.LOAD_QUIZ({
             correct: 'B. girl'
         },
         {
-            qNum: 5,
-            part: 'A',
-            type: 'fill',
-            score: 5,
-            text: '听录音，写出你听到的字母大写形式。<br><span style="font-size:14px;color:#666">(Listen and write the capital letter)</span>',
-            audioText: 'H H',
-            correct: 'H'
-        },
+            qNum: 5,
+            part: 'A',
+            type: 'select',
+            score: 5,
+            text: '听录音，选出你听到的字母大写形式。<br><span style="font-size:14px;color:#666">(Listen and choose the capital letter)</span>',
+            audioText: 'H H',
+            options: ['A. H', 'B. I', 'C. G', 'D. K'],
+            correct: 'A. H'
+        },
         
         // ===========================
         // Part B: Reading (Target: 25 pts) - 文本理解与匹配
@@ -71,23 +72,26 @@ window.LOAD_QUIZ({
             type: 'select',
             score: 5,
             text: '请选出“介绍他人”的正确句型。<br><span style="font-size:14px;color:#666">(Choose the correct sentence for introduction)</span>',
-            imageUri: 'u1_mom.png',
+            imageUri: 'image:u1_sallys_mom',
             options: ['A. I’m my mom.', 'B. Who is she?', 'C. This is my mom.', 'D. How are you?'],
             correct: 'C. This is my mom.'
         },
         {
-            qNum: 7,
-            part: 'B',
-            type: 'match',
-            score: 5,
-            text: '阅读配对：将问句和正确的应答语匹配。<br><span style="font-size:14px;color:#666">(Match the question and the correct response)</span>',
-            match: {
-                'Nice to meet you.': 'Nice to meet you, too.',
-                'Have a good day!': 'Thank you, you too!',
-                'Goodbye!': 'Bye!'
-            },
-            correct: null // 匹配题不需要此字段
-        },
+            qNum: 7,
+            part: 'B',
+            type: 'match',
+            score: 5,
+            text: '阅读配对：将问句和正确的应答语匹配。<br><span style="font-size:14px;color:#666">(Match the question and the correct response)</span>',
+            // ✅ 修改后的结构：使用 match_pairs 字段来定义匹配对，以提高兼容性。
+            match_pairs: [ 
+                { q: 'Nice to meet you.', a: 'Nice to meet you, too.' },
+                { q: 'Have a good day!', a: 'Thank you, you too!' },
+                { q: 'Goodbye!', a: 'Bye!' }
+            ],
+            // 匹配题不再需要独立的 options 或 correct 字段
+            options: [],
+            correct: null
+        },
         {
             qNum: 8,
             part: 'B',
